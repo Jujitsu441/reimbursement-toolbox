@@ -401,10 +401,12 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 .ip-result{min-height:280px;overflow:hidden}
 .ip-status{padding:16px 18px;border-bottom:1px solid var(--border-light);background:#fcfcfa;font-size:13px;color:#666}
 .ip-main{padding:22px}
-.ip-address-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
+.ip-results-list{display:grid;gap:14px}
+.ip-version-card{border:1px solid var(--border-light);border-radius:8px;background:#fff;padding:16px}
+.ip-address-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
 .ip-address{
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:30px;font-weight:800;letter-spacing:0;color:#1f2937;word-break:break-all;
+  font-size:26px;font-weight:800;letter-spacing:0;color:#1f2937;word-break:break-all;
   line-height:1.2;
 }
 .ip-type{
@@ -1536,16 +1538,45 @@ function renderHolidayTool() {
 async function queryMyIP() {
   const status = document.getElementById('ip-status');
   const main = document.getElementById('ip-main');
-  status.textContent = '正在查询公网 IP 和归属地…';
+  status.textContent = '正在分别查询 IPv4 和 IPv6…';
   main.innerHTML = '<div class="ip-empty">查询中，请稍候…</div>';
+  const targets = [
+    { type:'IPv4', url:'https://api.ipify.org?format=json' },
+    { type:'IPv6', url:'https://api6.ipify.org?format=json' },
+  ];
+  const results = (await Promise.all(targets.map(queryIPTarget))).filter(Boolean);
+  if (!results.length) {
+    status.textContent = '查询失败';
+    main.innerHTML = '<div class="ip-empty">无法访问 IP 查询接口，请检查网络后重试。</div>';
+    return;
+  }
+  renderIPInfo(results);
+  status.textContent = `查询完成（${results.map(r=>r.type).join('、')}）`;
+  ipLoaded = true;
+}
+
+async function queryIPTarget(target) {
+  try {
+    const res = await fetch(target.url, { cache:'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.ip) throw new Error('未返回 IP');
+    return await lookupIPGeo(data.ip, target.type);
+  } catch (e) {
+    return null;
+  }
+}
+
+async function lookupIPGeo(ip, type) {
   const providers = [
     {
       name:'ipwho.is',
-      url:'https://ipwho.is/?lang=zh-CN',
+      url:`https://ipwho.is/${encodeURIComponent(ip)}?lang=zh-CN`,
       parse:data => {
         if (!data.success) throw new Error(data.message || 'IP 归属地查询失败');
         return {
           ip:data.ip,
+          type,
           country:data.country,
           region:data.region,
           city:data.city,
@@ -1558,11 +1589,12 @@ async function queryMyIP() {
     },
     {
       name:'ipapi.co',
-      url:'https://ipapi.co/json/',
+      url:`https://ipapi.co/${encodeURIComponent(ip)}/json/`,
       parse:data => {
         if (data.error) throw new Error(data.reason || 'IP 归属地查询失败');
         return {
-          ip:data.ip,
+          ip:data.ip || ip,
+          type,
           country:data.country_name,
           region:data.region,
           city:data.city,
@@ -1575,9 +1607,10 @@ async function queryMyIP() {
     },
     {
       name:'ipinfo.io',
-      url:'https://ipinfo.io/json',
+      url:`https://ipinfo.io/${encodeURIComponent(ip)}/json`,
       parse:data => ({
-        ip:data.ip,
+        ip:data.ip || ip,
+        type,
         country:data.country,
         region:data.region,
         city:data.city,
@@ -1588,61 +1621,49 @@ async function queryMyIP() {
       })
     },
   ];
-
-  const failed = [];
   for (const provider of providers) {
     try {
-      status.textContent = `正在查询公网 IP 和归属地…（${provider.name}）`;
       const res = await fetch(provider.url, { cache:'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const info = provider.parse(await res.json());
-      if (!info.ip) throw new Error('未返回 IP');
-      renderIPInfo(info);
-      status.textContent = `查询完成（${info.source}）`;
-      ipLoaded = true;
-      return;
-    } catch (e) {
-      failed.push(provider.name);
-    }
+      return provider.parse(await res.json());
+    } catch (e) {}
   }
-
-  try {
-    status.textContent = '归属地接口不可用，正在尝试仅查询 IP…';
-    const fallback = await fetch('https://api.ipify.org?format=json', { cache:'no-store' });
-    if (!fallback.ok) throw new Error(`HTTP ${fallback.status}`);
-    const data = await fallback.json();
-    renderIPInfo({ ip:data.ip, country:'', region:'', city:'', isp:'', org:'', timezone:'', source:'api.ipify.org' });
-    status.textContent = `只查询到 IP，归属地接口暂不可用（已尝试：${failed.join('、')}）`;
-    ipLoaded = true;
-  } catch (err) {
-    status.textContent = '查询失败';
-    main.innerHTML = '<div class="ip-empty">无法访问 IP 查询接口，请检查网络后重试。</div>';
-  }
+  return { ip, type, country:'', region:'', city:'', isp:'', org:'', timezone:'', source:'仅 IP' };
 }
 
-function renderIPInfo(info) {
-  const ipType = getIPType(info.ip);
+function renderIPInfo(infos) {
   const fields = [
-    ['国家/地区', info.country || '—'],
-    ['省/州', info.region || '—'],
-    ['城市', info.city || '—'],
-    ['运营商', info.isp || '—'],
-    ['组织', info.org || '—'],
-    ['时区', info.timezone || '—'],
+    info => ['国家/地区', info.country || '—'],
+    info => ['省/州', info.region || '—'],
+    info => ['城市', info.city || '—'],
+    info => ['运营商', info.isp || '—'],
+    info => ['组织', info.org || '—'],
+    info => ['时区', info.timezone || '—'],
   ];
-  ipInfoText = [
-    `IP：${info.ip || ''}`,
-    `IP 类型：${ipType}`,
-    ...fields.map(([k,v]) => `${k}：${v}`),
-    `数据接口：${info.source}`,
-  ].join('\n');
+  ipInfoText = infos.map(info => {
+    const pairs = fields.map(fn => fn(info));
+    return [
+      `IP：${info.ip || ''}`,
+      `IP 类型：${info.type || getIPType(info.ip)}`,
+      ...pairs.map(([k,v]) => `${k}：${v}`),
+      `数据接口：${info.source}`,
+    ].join('\n');
+  }).join('\n\n');
   document.getElementById('ip-main').innerHTML = `
-    <div class="ip-address-row">
-      <div class="ip-address">${esc(info.ip || '—')}</div>
-      <span class="ip-type">${ipType}</span>
-    </div>
-    <div class="ip-grid">
-      ${fields.map(([k,v]) => `<div class="ip-field"><div class="ip-field-label">${k}</div><div class="ip-field-value">${esc(v)}</div></div>`).join('')}
+    <div class="ip-results-list">
+      ${infos.map(info => {
+        const pairs = fields.map(fn => fn(info));
+        const ipType = info.type || getIPType(info.ip);
+        return `<div class="ip-version-card">
+          <div class="ip-address-row">
+            <div class="ip-address">${esc(info.ip || '—')}</div>
+            <span class="ip-type">${ipType}</span>
+          </div>
+          <div class="ip-grid">
+            ${pairs.map(([k,v]) => `<div class="ip-field"><div class="ip-field-label">${k}</div><div class="ip-field-value">${esc(v)}</div></div>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
     </div>
   `;
 }
