@@ -252,42 +252,71 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 }
 
 /* ── RMB uppercase converter ── */
-.money-wrap{flex:1;overflow:auto;padding:40px 24px}
-.money-panel{width:100%;max-width:760px;margin:0 auto}
-.money-card{
+.money-wrap{flex:1;overflow:auto;padding:34px 24px;background:#f4f3ef}
+.money-panel{width:100%;max-width:1040px;margin:0 auto}
+.money-shell{display:grid;grid-template-columns:390px 1fr;gap:18px;align-items:stretch}
+.money-editor,.money-output-panel{
   background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r-lg);padding:24px;
+  border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.03);
 }
-.money-label{font-size:13px;font-weight:600;margin-bottom:10px;color:#444}
+.money-editor{padding:22px}
+.money-output-panel{display:flex;flex-direction:column;min-height:280px;overflow:hidden}
+.money-label{
+  display:block;font-size:12px;font-weight:700;color:#4b5563;
+  margin-bottom:10px;letter-spacing:.2px;
+}
 .money-input{
-  width:100%;font-size:28px;font-family:inherit;padding:14px 16px;
-  border:1.5px solid var(--border);border-radius:8px;color:var(--text);
-  outline:none;background:#fff;
+  width:100%;font-size:30px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  padding:13px 14px;border:1.5px solid #cfd4dc;border-radius:7px;
+  color:var(--text);outline:none;background:#fff;letter-spacing:0;
 }
-.money-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
-.money-result{
-  margin-top:18px;border:1px solid var(--border-light);border-radius:8px;
-  background:#fafaf6;padding:18px;min-height:88px;
+.money-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.money-error{
+  min-height:18px;font-size:12px;color:var(--danger);
+  margin-top:8px;display:block;visibility:hidden;
 }
-.money-output{font-size:24px;font-weight:700;line-height:1.7;word-break:break-all}
-.money-placeholder{font-size:14px;color:var(--sub);line-height:1.8}
-.money-error{font-size:13px;color:var(--danger);margin-top:10px;display:none}
-.money-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.money-examples{margin-top:18px}
+.money-examples-title{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.6px;text-transform:uppercase;margin-bottom:9px}
+.money-chip-row{display:flex;flex-wrap:wrap;gap:8px}
+.money-chip{
+  font-size:12px;font-family:inherit;padding:6px 10px;border-radius:6px;
+  border:1px solid var(--border);background:#fbfbf8;color:#666;cursor:pointer;
+}
+.money-chip:hover{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.money-side-actions{display:flex;gap:10px;margin-top:22px}
 .money-btn{
   font-size:13px;font-family:inherit;padding:8px 14px;border-radius:6px;
   border:1px solid var(--border);background:#fff;color:#444;cursor:pointer;
 }
-.money-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.money-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
 .money-btn:hover{border-color:var(--blue);color:var(--blue)}
 .money-btn.primary:hover{background:var(--blue-d);border-color:var(--blue-d);color:#fff}
-.money-examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.money-chip{
-  font-size:12px;font-family:inherit;padding:5px 9px;border-radius:999px;
-  border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;
+.money-result-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 18px;border-bottom:1px solid var(--border-light);background:#fcfcfa;
 }
-.money-chip:hover{border-color:var(--blue);color:var(--blue)}
+.money-result-title{font-size:13px;font-weight:700;color:#3f3f3a}
+.money-result-meta{font-size:12px;color:var(--sub);white-space:nowrap}
+.money-result{
+  flex:1;padding:26px 28px 30px;display:flex;align-items:center;
+  background:
+    linear-gradient(90deg,rgba(37,99,235,.08) 0 4px,transparent 4px),
+    repeating-linear-gradient(0deg,#fff,#fff 35px,#f4f4ef 36px);
+}
+.money-output{
+  font-size:28px;font-weight:800;line-height:1.8;word-break:break-all;
+  color:#202124;letter-spacing:0;
+}
+.money-placeholder{font-size:15px;color:#9a9a92;line-height:1.8}
 
-@media(max-width:760px){.tool-cards{grid-template-columns:1fr}.money-input{font-size:22px}.money-output{font-size:20px}}
+@media(max-width:900px){
+  .tool-cards{grid-template-columns:1fr}
+  .money-shell{grid-template-columns:1fr}
+  .money-wrap{padding:20px 14px}
+  .money-input{font-size:24px}
+  .money-output{font-size:22px}
+  .money-output-panel{min-height:220px}
+}
 
 /* ── 赞赏区 ── */
 .tip-wrap{width:100%;max-width:680px;margin-top:16px}
@@ -471,23 +500,36 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
   </div>
   <main class="money-wrap">
     <section class="money-panel">
-      <div class="money-card">
-        <div class="money-label">阿拉伯数字金额</div>
-        <input class="money-input" id="money-input" type="text" inputmode="decimal" autocomplete="off" placeholder="例如：1234.56" oninput="renderMoneyUpper()" onkeydown="handleMoneyKey(event)">
-        <div class="money-error" id="money-error"></div>
-        <div class="money-result">
-          <div class="money-placeholder" id="money-placeholder">输入金额后，这里会显示人民币大写。</div>
-          <div class="money-output" id="money-output"></div>
+      <div class="money-shell">
+        <div class="money-editor">
+          <label class="money-label" for="money-input">阿拉伯数字金额</label>
+          <input class="money-input" id="money-input" type="text" inputmode="decimal" autocomplete="off" placeholder="1234.56" oninput="renderMoneyUpper()" onkeydown="handleMoneyKey(event)">
+          <div class="money-error" id="money-error"></div>
+          <div class="money-examples">
+            <div class="money-examples-title">常用示例</div>
+            <div class="money-chip-row">
+              <button class="money-chip" onclick="setMoneyExample('0')">0</button>
+              <button class="money-chip" onclick="setMoneyExample('1000')">1000</button>
+              <button class="money-chip" onclick="setMoneyExample('1001.05')">1001.05</button>
+              <button class="money-chip" onclick="setMoneyExample('123456.78')">123456.78</button>
+            </div>
+          </div>
+          <div class="money-side-actions">
+            <button class="money-btn" onclick="clearMoneyUpper()">清空</button>
+          </div>
         </div>
-        <div class="money-actions">
-          <button class="money-btn primary" onclick="copyMoneyUpper()">复制大写金额</button>
-          <button class="money-btn" onclick="clearMoneyUpper()">清空</button>
-        </div>
-        <div class="money-examples">
-          <button class="money-chip" onclick="setMoneyExample('0')">0</button>
-          <button class="money-chip" onclick="setMoneyExample('1000')">1000</button>
-          <button class="money-chip" onclick="setMoneyExample('1001.05')">1001.05</button>
-          <button class="money-chip" onclick="setMoneyExample('123456.78')">123456.78</button>
+        <div class="money-output-panel">
+          <div class="money-result-head">
+            <div>
+              <div class="money-result-title">人民币大写</div>
+              <div class="money-result-meta">费用报销单填写格式</div>
+            </div>
+            <button class="money-btn primary" onclick="copyMoneyUpper()">复制</button>
+          </div>
+          <div class="money-result">
+            <div class="money-placeholder" id="money-placeholder">待输入金额</div>
+            <div class="money-output" id="money-output"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1230,12 +1272,13 @@ function renderMoneyUpper() {
     const text = amountToRMBUpper(input.value);
     output.textContent = text;
     placeholder.style.display = text ? 'none' : '';
-    error.style.display = 'none';
+    error.textContent = '';
+    error.style.visibility = 'hidden';
   } catch (e) {
     output.textContent = '';
     placeholder.style.display = '';
     error.textContent = e.message;
-    error.style.display = '';
+    error.style.visibility = 'visible';
   }
 }
 
