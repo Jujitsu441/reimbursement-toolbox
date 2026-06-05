@@ -27,44 +27,83 @@ html,body{height:100%;font-family:'PingFang SC','Microsoft YaHei',sans-serif;col
    HOME PAGE
 ══════════════════════════════════════ */
 #v-home{
-  min-height:100vh;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;
-  padding:56px 24px 80px;overflow-y:auto;
+  min-height:100vh;background:#f3f2ed;
+  padding:30px 24px 44px;overflow-y:auto;
 }
-.home-logo{font-size:48px;margin-bottom:16px}
-.home-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:8px;text-align:center}
-.home-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:40px}
+.home-shell{width:100%;max-width:1180px;margin:0 auto}
+.home-top{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:28px;margin-bottom:26px;
+}
+.home-kicker{
+  font-size:12px;font-weight:700;color:var(--blue);
+  letter-spacing:.7px;text-transform:uppercase;margin-bottom:8px;
+}
+.home-title{font-size:34px;font-weight:800;letter-spacing:0;margin-bottom:8px;color:#202124}
+.home-sub{font-size:14px;color:#6b7280;line-height:1.8}
+.home-status{
+  display:grid;grid-template-columns:repeat(2,auto);gap:12px;
+  padding:12px 14px;border:1px solid var(--border);border-radius:8px;
+  background:#fff;white-space:nowrap;
+}
+.home-stat{min-width:86px}
+.home-stat-num{font-size:22px;font-weight:800;color:#1f2937;line-height:1}
+.home-stat-label{font-size:11px;color:var(--sub);margin-top:5px}
+.home-grid{
+  display:grid;grid-template-columns:330px 1fr;gap:22px;align-items:start;
+}
 
 /* Tips card */
 .tips-card{
-  background:var(--surface);border-radius:var(--r-lg);
-  border:1px solid var(--border);padding:20px 24px;
-  width:100%;max-width:680px;margin-bottom:32px;
+  background:#fff;border-radius:8px;border:1px solid var(--border);
+  padding:22px;position:sticky;top:22px;
 }
 .tips-head{
-  display:flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:600;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;
+  font-size:15px;font-weight:800;color:#2f3440;margin-bottom:14px;
 }
-.tips-body{font-size:13px;color:#444;line-height:1.9}
-.tips-body ol{padding-left:18px}
-.tips-body li{margin-bottom:3px}
-.tips-body li:last-child{color:var(--amber);font-weight:500}
+.tips-body{font-size:13px;color:#444;line-height:1.65}
+.tips-body ol{list-style:none;display:grid;gap:8px}
+.tips-body li{
+  display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:center;
+  padding:7px 8px;border-radius:6px;background:#fbfbf8;
+}
+.tips-body li::before{
+  content:counter(item);counter-increment:item;
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#ecece5;color:#777;font-size:11px;font-weight:700;
+}
+.tips-body ol{counter-reset:item}
+.tips-body li:last-child{background:#fff7ed;color:#c2410c;font-weight:600}
+.tips-body li:last-child::before{background:#fed7aa;color:#9a3412}
 
 /* Tool cards */
-.tool-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px}
-.tc{
-  background:var(--surface);border-radius:var(--r-lg);border:1.5px solid var(--border);
-  padding:28px 22px;cursor:pointer;transition:all .2s;
+.tool-board{display:grid;gap:22px}
+.tool-section{
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  padding:18px;
 }
-.tc:hover{border-color:var(--blue);box-shadow:0 4px 20px rgba(37,99,235,.1);transform:translateY(-2px)}
-.tc-icon{font-size:36px;margin-bottom:12px}
-.tc-name{font-size:16px;font-weight:600;margin-bottom:8px}
-.tc-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.tool-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+.tool-section-title{font-size:16px;font-weight:800;color:#2f3440}
+.tool-section-sub{font-size:12px;color:#8a8a84;margin-top:4px;line-height:1.6}
+.tool-section-line{display:none}
+.tool-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
+.tc{
+  background:#fbfbf8;border-radius:8px;border:1px solid #e6e6df;
+  padding:18px;cursor:pointer;transition:all .18s;min-height:190px;
+  display:flex;flex-direction:column;
+}
+.tc:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(37,99,235,.1);transform:translateY(-2px);background:#fff}
+.tc-icon{font-size:28px;margin-bottom:14px}
+.tc-name{font-size:16px;font-weight:800;margin-bottom:8px;color:#202124}
+.tc-desc{font-size:12px;color:#73736d;line-height:1.7;margin-bottom:16px}
 .tc-enter{
-  display:inline-flex;align-items:center;gap:4px;
+  display:inline-flex;align-items:center;gap:4px;margin-top:auto;
   font-size:12px;color:var(--blue);font-weight:500;
 }
+.utility-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.utility-list .tc{min-height:136px;display:grid;grid-template-columns:42px 1fr;column-gap:12px;align-items:start}
+.utility-list .tc-icon{margin:0;font-size:28px}
+.utility-list .tc-enter{grid-column:2;margin-top:4px}
 
 /* ══════════════════════════════════════
    TOOL LAYOUT (shared)
@@ -309,10 +348,90 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 }
 .money-placeholder{font-size:15px;color:#9a9a92;line-height:1.8}
 
+/* ── Practical tools ── */
+.simple-wrap{flex:1;overflow:auto;padding:28px 24px;background:#f4f3ef}
+.simple-panel{width:100%;max-width:1100px;margin:0 auto}
+.tool-headline{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.tool-headline h2{font-size:24px;letter-spacing:0;font-weight:800;color:#2f3440}
+.tool-headline p{font-size:13px;color:var(--muted);line-height:1.7;margin-top:6px}
+.source-link{font-size:12px;color:var(--blue);text-decoration:none;white-space:nowrap}
+.source-link:hover{text-decoration:underline}
+
+.holiday-summary{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;margin-bottom:14px;
+}
+.holiday-next{font-size:16px;font-weight:700;color:#3f3f46}
+.holiday-next strong{color:#ef4444}
+.holiday-today{font-size:12px;color:var(--muted);white-space:nowrap}
+.holiday-table{
+  width:100%;border-collapse:separate;border-spacing:0;background:#fff;
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;
+}
+.holiday-table th,.holiday-table td{
+  padding:14px 16px;border-bottom:1px solid var(--border-light);
+  text-align:left;font-size:13px;vertical-align:middle;
+}
+.holiday-table th{background:#fafaf7;color:#7a7a72;font-size:12px;font-weight:700}
+.holiday-table tr:last-child td{border-bottom:none}
+.holiday-name{display:inline-flex;align-items:center;padding:5px 10px;border-radius:6px;font-weight:700}
+.holiday-table tr.past{color:#a3a3a3;background:#fbfbfa}
+.holiday-table tr.past .holiday-name{background:#f0f0ec;color:#9a9a92}
+.holiday-table tr.current{background:#fff7ed}
+.holiday-table tr.current .holiday-name{background:#fed7aa;color:#c2410c}
+.holiday-table tr.upcoming .holiday-name{background:#e8f8df;color:#22a318}
+.holiday-days{font-weight:700;text-align:center}
+.workdays{color:#555;line-height:1.7}
+.empty-workday{color:#bbb}
+.holiday-note{
+  margin-top:14px;background:#fff;border:1px solid var(--border);
+  border-radius:8px;padding:16px 18px;color:#666;font-size:13px;line-height:1.8;
+}
+
+.ip-shell{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:stretch}
+.ip-card,.ip-result{
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  box-shadow:0 1px 2px rgba(0,0,0,.03);
+}
+.ip-card{padding:22px}
+.ip-card-title{font-size:16px;font-weight:800;margin-bottom:8px}
+.ip-card-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:18px}
+.ip-actions{display:flex;gap:10px;flex-wrap:wrap}
+.ip-result{min-height:280px;overflow:hidden}
+.ip-status{padding:16px 18px;border-bottom:1px solid var(--border-light);background:#fcfcfa;font-size:13px;color:#666}
+.ip-main{padding:22px}
+.ip-address{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:30px;font-weight:800;letter-spacing:0;color:#1f2937;word-break:break-all;
+  margin-bottom:18px;
+}
+.ip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ip-field{border:1px solid var(--border-light);border-radius:7px;padding:10px 12px;background:#fbfbf8}
+.ip-field-label{font-size:11px;color:var(--sub);margin-bottom:5px}
+.ip-field-value{font-size:13px;color:#333;word-break:break-all;min-height:18px}
+.ip-empty{color:var(--sub);font-size:14px;padding:40px 22px}
+
 @media(max-width:900px){
+  #v-home{padding:22px 14px 32px}
+  .home-top{display:block;margin-bottom:18px}
+  .home-title{font-size:28px}
+  .home-status{display:flex;width:100%;margin-top:16px}
+  .home-stat{flex:1}
+  .home-grid{grid-template-columns:1fr;gap:14px}
+  .tips-card{position:static}
   .tool-cards{grid-template-columns:1fr}
+  .utility-list{grid-template-columns:1fr}
+  .utility-list .tc{grid-template-columns:36px 1fr}
+  .tool-headline{display:block}
+  .holiday-summary{align-items:flex-start;flex-direction:column}
+  .holiday-today{white-space:normal}
+  .holiday-table{display:block;overflow-x:auto;white-space:nowrap}
+  .ip-shell{grid-template-columns:1fr}
+  .ip-grid{grid-template-columns:1fr}
   .money-shell{grid-template-columns:1fr}
   .money-wrap{padding:20px 14px}
+  .simple-wrap{padding:20px 14px}
   .money-input{font-size:24px}
   .money-output{font-size:22px}
   .money-output-panel{min-height:220px}
@@ -362,64 +481,119 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
      HOME
 ══════════════════════════════════════ -->
 <div id="v-home">
-  <div class="home-logo">🗂️</div>
-  <h1 class="home-title">报销工具箱</h1>
-  <p class="home-sub">发票排版 · 付款截图整理 · 一键导出 PDF，完全本地运行</p>
-
-  <div class="tips-card">
-    <div class="tips-head">📌 报销材料粘贴顺序提示</div>
-    <div class="tips-body">
-      <ol>
-        <li>费用报销单</li>
-        <li>发票</li>
-        <li>付款记录（付款截图）</li>
-        <li>打车行程单</li>
-        <li>钉钉差旅报销单</li>
-        <li>钉钉出差申请单</li>
-        <li>需加印一份的发票（酒店专票、火车/高铁票）</li>
-      </ol>
-    </div>
-  </div>
-
-  <div class="tool-cards">
-    <div class="tc" onclick="showView('inv')">
-      <div class="tc-icon">🧾</div>
-      <div class="tc-name">发票排版工具</div>
-      <div class="tc-desc">上传发票图片，每页上下两张，便于从中间撕开；酒店专票、火车票等可标记「加印一份」，额外副本自动排在末尾。</div>
-      <div class="tc-enter">进入工具 →</div>
-    </div>
-    <div class="tc" onclick="showView('ss')">
-      <div class="tc-icon">📱</div>
-      <div class="tc-name">报销截图排版工具</div>
-      <div class="tc-desc">上传支付宝/微信付款截图，A4 每页 2 行 × 3 列，中间留有对折撕开线。</div>
-      <div class="tc-enter">进入工具 →</div>
-    </div>
-    <div class="tc" onclick="showView('money')">
-      <div class="tc-icon">💴</div>
-      <div class="tc-name">人民币大写转换</div>
-      <div class="tc-desc">输入阿拉伯数字金额，立即转换为费用报销单可填写的人民币大写格式。</div>
-      <div class="tc-enter">进入工具 →</div>
-    </div>
-  </div>
-
-  <!-- 赞赏区 -->
-  <div class="tip-wrap">
-    <div class="tip-card">
-      <div class="tip-toggle" onclick="this.parentElement.classList.toggle('open')" title="点击展开/收起">
-        ☕ 如果这个工具帮到了你，可以请开发者喝杯咖啡～
-        <span class="tip-arrow">▾</span>
+  <div class="home-shell">
+    <header class="home-top">
+      <div>
+        <div class="home-kicker">Local reimbursement workspace</div>
+        <h1 class="home-title">报销工具箱</h1>
+        <p class="home-sub">整理发票、付款截图、人民币大写和日常查询。材料只在本机处理，不上传。</p>
       </div>
-      <div class="tip-body">
-        <div class="tip-copy">
-          <div class="tip-title">支持这个小工具继续维护</div>
-          <div class="tip-desc">工具完全本地运行，不上传报销材料。若它节省了你的整理时间，可以用微信扫码随心赞赏。</div>
+      <div class="home-status" aria-label="工具概览">
+        <div class="home-stat">
+          <div class="home-stat-num">3</div>
+          <div class="home-stat-label">报销工具</div>
         </div>
-        <div class="tip-plate">
-          <img class="tip-qr" src="assets/wechat-reward.png" alt="微信赞赏收款码">
-          <p class="tip-note">微信扫码 · 随心赞赏</p>
+        <div class="home-stat">
+          <div class="home-stat-num">2</div>
+          <div class="home-stat-label">实用工具</div>
         </div>
       </div>
-    </div>
+    </header>
+
+    <main class="home-grid">
+      <aside class="tips-card">
+        <div class="tips-head">报销材料粘贴顺序</div>
+        <div class="tips-body">
+          <ol>
+            <li>费用报销单</li>
+            <li>发票</li>
+            <li>付款记录（付款截图）</li>
+            <li>打车行程单</li>
+            <li>钉钉差旅报销单</li>
+            <li>钉钉出差申请单</li>
+            <li>需加印一份的发票（酒店专票、火车/高铁票）</li>
+          </ol>
+        </div>
+      </aside>
+
+      <div class="tool-board">
+        <section class="tool-section">
+          <div class="tool-section-head">
+            <div>
+              <div class="tool-section-title">报销相关工具</div>
+              <div class="tool-section-sub">从材料整理到纸质单据填写，覆盖常用报销动作。</div>
+            </div>
+          </div>
+          <div class="tool-cards">
+            <div class="tc" onclick="showView('inv')">
+              <div class="tc-icon">🧾</div>
+              <div class="tc-name">发票排版工具</div>
+              <div class="tc-desc">上传发票图片，每页上下两张，便于从中间撕开；需要加印的发票可自动排到末尾。</div>
+              <div class="tc-enter">进入工具 →</div>
+            </div>
+            <div class="tc" onclick="showView('ss')">
+              <div class="tc-icon">📱</div>
+              <div class="tc-name">报销截图排版工具</div>
+              <div class="tc-desc">上传支付宝/微信付款截图，A4 每页 2 行 × 3 列，中间留有对折撕开线。</div>
+              <div class="tc-enter">进入工具 →</div>
+            </div>
+            <div class="tc" onclick="showView('money')">
+              <div class="tc-icon">💴</div>
+              <div class="tc-name">人民币大写转换</div>
+              <div class="tc-desc">输入阿拉伯数字金额，立即转换为费用报销单可填写的人民币大写格式。</div>
+              <div class="tc-enter">进入工具 →</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tool-section">
+          <div class="tool-section-head">
+            <div>
+              <div class="tool-section-title">其他实用工具</div>
+              <div class="tool-section-sub">放不进报销流程，但打开频率很高的查询工具。</div>
+            </div>
+          </div>
+          <div class="utility-list">
+            <div class="tc" onclick="showView('holiday')">
+              <div class="tc-icon">📅</div>
+              <div>
+                <div class="tc-name">2026 放假安排</div>
+                <div class="tc-desc">查看全年节假日、调休上班日和放假天数，提示距离下一个节日还有多少天。</div>
+              </div>
+              <div class="tc-enter">进入工具 →</div>
+            </div>
+            <div class="tc" onclick="showView('ip')">
+              <div class="tc-icon">🌐</div>
+              <div>
+                <div class="tc-name">IP 地址查询</div>
+                <div class="tc-desc">查询本机公网 IP，展示省市、国家、运营商等归属地信息，并支持一键复制。</div>
+              </div>
+              <div class="tc-enter">进入工具 →</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 赞赏区 -->
+        <div class="tip-wrap">
+          <div class="tip-card">
+            <div class="tip-toggle" onclick="this.parentElement.classList.toggle('open')" title="点击展开/收起">
+              ☕ 如果这个工具帮到了你，可以请开发者喝杯咖啡～
+              <span class="tip-arrow">▾</span>
+            </div>
+            <div class="tip-body">
+              <div class="tip-copy">
+                <div class="tip-title">支持这个小工具继续维护</div>
+                <div class="tip-desc">工具完全本地运行，不上传报销材料。若它节省了你的整理时间，可以用微信扫码随心赞赏。</div>
+              </div>
+              <div class="tip-plate">
+                <img class="tip-qr" src="assets/wechat-reward.png" alt="微信赞赏收款码">
+                <p class="tip-note">微信扫码 · 随心赞赏</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </div>
 
@@ -601,6 +775,85 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 </div>
 
 <!-- ══════════════════════════════════════
+     2026 HOLIDAY TOOL
+══════════════════════════════════════ -->
+<div id="v-holiday" class="tool-view">
+  <div class="topbar">
+    <button class="btn-back" onclick="showView('home')">← 首页</button>
+    <span class="topbar-title">2026 放假安排</span>
+    <span class="topbar-badge">节假日 · 调休</span>
+    <button class="btn-switch" onclick="showView('ip')">切换到 IP 查询 →</button>
+  </div>
+  <main class="simple-wrap">
+    <section class="simple-panel">
+      <div class="tool-headline">
+        <div>
+          <h2>2026 年放假安排</h2>
+          <p>查看全年法定节假日放假时间、调休上班日期和放假天数。</p>
+        </div>
+        <a class="source-link" href="https://www.gov.cn/zhengce/zhengceku/202511/content_7047091.htm" target="_blank" rel="noopener">数据来源：国务院办公厅</a>
+      </div>
+      <div class="holiday-summary">
+        <div class="holiday-next" id="holiday-next">正在计算下一个节日…</div>
+        <div class="holiday-today" id="holiday-today"></div>
+      </div>
+      <table class="holiday-table">
+        <thead>
+          <tr>
+            <th>节日</th>
+            <th>放假时间</th>
+            <th>调休上班日期</th>
+            <th>放假天数</th>
+          </tr>
+        </thead>
+        <tbody id="holiday-body"></tbody>
+      </table>
+      <div class="holiday-note">
+        已过去的节假日会显示为灰色，当前假期显示为橙色，尚未到来的假期显示为绿色。倒计时按本机日期计算。
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════
+     IP LOOKUP TOOL
+══════════════════════════════════════ -->
+<div id="v-ip" class="tool-view">
+  <div class="topbar">
+    <button class="btn-back" onclick="showView('home')">← 首页</button>
+    <span class="topbar-title">IP 地址查询</span>
+    <span class="topbar-badge">公网 IP · 归属地</span>
+    <button class="btn-switch" onclick="showView('holiday')">切换到放假安排 →</button>
+  </div>
+  <main class="simple-wrap">
+    <section class="simple-panel">
+      <div class="tool-headline">
+        <div>
+          <h2>本机 IP 地址查询</h2>
+          <p>查询当前网络出口的公网 IP，并展示国家、省市、运营商和时区信息。</p>
+        </div>
+      </div>
+      <div class="ip-shell">
+        <div class="ip-card">
+          <div class="ip-card-title">当前网络</div>
+          <div class="ip-card-desc">点击查询会依次尝试多个公共 IP 归属地接口。若归属地接口都不可用，才退回为只显示 IP 地址。</div>
+          <div class="ip-actions">
+            <button class="money-btn primary" onclick="queryMyIP()">查询本机 IP</button>
+            <button class="money-btn" id="ip-copy-btn" onclick="copyIPInfo()">复制信息</button>
+          </div>
+        </div>
+        <div class="ip-result">
+          <div class="ip-status" id="ip-status">尚未查询</div>
+          <div class="ip-main" id="ip-main">
+            <div class="ip-empty">进入工具后会自动查询，也可以点击左侧按钮手动刷新。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════
      SHARED: file inputs + progress
 ══════════════════════════════════════ -->
 <input type="file" id="inv-filein" multiple accept="image/*,application/pdf" style="position:fixed;left:-9999px;top:-9999px">
@@ -653,6 +906,8 @@ const ssFiles  = [];   // {id,name,dataUrl,w,h,size}
 const ZOOMS = [.4,.5,.6,.75,.85,1,1.1,1.25];
 let invZi = 3, ssZi = 3;
 let invDrag = null, ssDrag = null;
+let ipInfoText = '';
+let ipLoaded = false;
 
 /* ══════════════════════════════════════
    NAVIGATION
@@ -662,12 +917,18 @@ function showView(v) {
   const inv = document.getElementById('v-inv');
   const ss  = document.getElementById('v-ss');
   const money = document.getElementById('v-money');
+  const holiday = document.getElementById('v-holiday');
+  const ip = document.getElementById('v-ip');
   inv.classList.toggle('active', v==='inv');
   ss.classList.toggle('active',  v==='ss');
   money.classList.toggle('active', v==='money');
+  holiday.classList.toggle('active', v==='holiday');
+  ip.classList.toggle('active', v==='ip');
   if (v==='inv') { renderInvList(); renderInvPreview(); }
   if (v==='ss')  { renderSSList();  renderSSPreview();  }
   if (v==='money') { renderMoneyUpper(); setTimeout(()=>document.getElementById('money-input').focus(), 0); }
+  if (v==='holiday') renderHolidayTool();
+  if (v==='ip' && !ipLoaded) queryMyIP();
 }
 
 /* ══════════════════════════════════════
@@ -1190,6 +1451,222 @@ async function exportSSPDF() {
     setProg(100,'完成！'); await new Promise(r=>setTimeout(r,700));
   } catch(e){ alert('导出失败：'+e.message); }
   finally{ showProg(false); }
+}
+
+/* ══════════════════════════════════════
+   ── 2026 HOLIDAY TOOL ──
+══════════════════════════════════════ */
+const HOLIDAYS_2026 = [
+  { name:'元旦', start:'2026-01-01', end:'2026-01-03', range:'01月01日~01月03日', workdays:['01月04日（周日）上班'], days:3 },
+  { name:'春节', start:'2026-02-15', end:'2026-02-23', range:'02月15日~02月23日', workdays:['02月14日（周六）上班','02月28日（周六）上班'], days:9 },
+  { name:'清明节', start:'2026-04-04', end:'2026-04-06', range:'04月04日~04月06日', workdays:[], days:3 },
+  { name:'劳动节', start:'2026-05-01', end:'2026-05-05', range:'05月01日~05月05日', workdays:['05月09日（周六）上班'], days:5 },
+  { name:'端午节', start:'2026-06-19', end:'2026-06-21', range:'06月19日~06月21日', workdays:[], days:3 },
+  { name:'中秋节', start:'2026-09-25', end:'2026-09-27', range:'09月25日~09月27日', workdays:[], days:3 },
+  { name:'国庆节', start:'2026-10-01', end:'2026-10-07', range:'10月01日~10月07日', workdays:['09月20日（周日）上班','10月10日（周六）上班'], days:7 },
+];
+
+function dateOnly(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function parseLocalDate(s) {
+  const [y,m,d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function daysBetween(a, b) {
+  return Math.round((dateOnly(b) - dateOnly(a)) / 86400000);
+}
+
+function formatDateCN(date) {
+  const week = ['周日','周一','周二','周三','周四','周五','周六'][date.getDay()];
+  return `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${week}`;
+}
+
+function holidayStatus(item, today) {
+  const start = parseLocalDate(item.start);
+  const end = parseLocalDate(item.end);
+  if (today > end) return 'past';
+  if (today >= start && today <= end) return 'current';
+  return 'upcoming';
+}
+
+function renderHolidayTool() {
+  const today = dateOnly(new Date());
+  const next = HOLIDAYS_2026.find(h => parseLocalDate(h.end) >= today);
+  const nextEl = document.getElementById('holiday-next');
+  const todayEl = document.getElementById('holiday-today');
+  todayEl.textContent = `今天是 ${formatDateCN(today)}`;
+  if (!next) {
+    nextEl.textContent = '2026 年法定节假日已全部结束';
+  } else {
+    const start = parseLocalDate(next.start);
+    const end = parseLocalDate(next.end);
+    if (today >= start && today <= end) {
+      nextEl.innerHTML = `今天在 <strong>${next.name}</strong> 假期中`;
+    } else {
+      const left = daysBetween(today, start);
+      nextEl.innerHTML = `距离下一个节日【${next.name}】还有 <strong>${left}</strong> 天`;
+    }
+  }
+
+  const body = document.getElementById('holiday-body');
+  body.innerHTML = HOLIDAYS_2026.map(h => {
+    const status = holidayStatus(h, today);
+    const work = h.workdays.length ? h.workdays.join('、') : '<span class="empty-workday">无调休上班</span>';
+    return `<tr class="${status}">
+      <td><span class="holiday-name">${h.name}</span></td>
+      <td>${h.range}</td>
+      <td class="workdays">${work}</td>
+      <td class="holiday-days">${h.days}天</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════
+   ── IP LOOKUP TOOL ──
+══════════════════════════════════════ */
+async function queryMyIP() {
+  const status = document.getElementById('ip-status');
+  const main = document.getElementById('ip-main');
+  status.textContent = '正在查询公网 IP 和归属地…';
+  main.innerHTML = '<div class="ip-empty">查询中，请稍候…</div>';
+  const providers = [
+    {
+      name:'ipwho.is',
+      url:'https://ipwho.is/?lang=zh-CN',
+      parse:data => {
+        if (!data.success) throw new Error(data.message || 'IP 归属地查询失败');
+        return {
+          ip:data.ip,
+          country:data.country,
+          region:data.region,
+          city:data.city,
+          isp:data.connection?.isp || data.connection?.org || '',
+          org:data.connection?.org || '',
+          timezone:data.timezone?.id || '',
+          source:'ipwho.is',
+        };
+      }
+    },
+    {
+      name:'ipapi.co',
+      url:'https://ipapi.co/json/',
+      parse:data => {
+        if (data.error) throw new Error(data.reason || 'IP 归属地查询失败');
+        return {
+          ip:data.ip,
+          country:data.country_name,
+          region:data.region,
+          city:data.city,
+          isp:data.org,
+          org:data.org,
+          timezone:data.timezone,
+          source:'ipapi.co',
+        };
+      }
+    },
+    {
+      name:'ipinfo.io',
+      url:'https://ipinfo.io/json',
+      parse:data => ({
+        ip:data.ip,
+        country:data.country,
+        region:data.region,
+        city:data.city,
+        isp:data.org,
+        org:data.org,
+        timezone:data.timezone,
+        source:'ipinfo.io',
+      })
+    },
+  ];
+
+  const failed = [];
+  for (const provider of providers) {
+    try {
+      status.textContent = `正在查询公网 IP 和归属地…（${provider.name}）`;
+      const res = await fetch(provider.url, { cache:'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const info = provider.parse(await res.json());
+      if (!info.ip) throw new Error('未返回 IP');
+      renderIPInfo(info);
+      status.textContent = `查询完成（${info.source}）`;
+      ipLoaded = true;
+      return;
+    } catch (e) {
+      failed.push(provider.name);
+    }
+  }
+
+  try {
+    status.textContent = '归属地接口不可用，正在尝试仅查询 IP…';
+    const fallback = await fetch('https://api.ipify.org?format=json', { cache:'no-store' });
+    if (!fallback.ok) throw new Error(`HTTP ${fallback.status}`);
+    const data = await fallback.json();
+    renderIPInfo({ ip:data.ip, country:'', region:'', city:'', isp:'', org:'', timezone:'', source:'api.ipify.org' });
+    status.textContent = `只查询到 IP，归属地接口暂不可用（已尝试：${failed.join('、')}）`;
+    ipLoaded = true;
+  } catch (err) {
+    status.textContent = '查询失败';
+    main.innerHTML = '<div class="ip-empty">无法访问 IP 查询接口，请检查网络后重试。</div>';
+  }
+}
+
+function renderIPInfo(info) {
+  const fields = [
+    ['国家/地区', info.country || '—'],
+    ['省/州', info.region || '—'],
+    ['城市', info.city || '—'],
+    ['运营商', info.isp || '—'],
+    ['组织', info.org || '—'],
+    ['时区', info.timezone || '—'],
+  ];
+  ipInfoText = [
+    `IP：${info.ip || ''}`,
+    ...fields.map(([k,v]) => `${k}：${v}`),
+    `数据接口：${info.source}`,
+  ].join('\n');
+  document.getElementById('ip-main').innerHTML = `
+    <div class="ip-address">${esc(info.ip || '—')}</div>
+    <div class="ip-grid">
+      ${fields.map(([k,v]) => `<div class="ip-field"><div class="ip-field-label">${k}</div><div class="ip-field-value">${esc(v)}</div></div>`).join('')}
+    </div>
+  `;
+}
+
+async function copyIPInfo() {
+  const btn = document.getElementById('ip-copy-btn');
+  if (!ipInfoText) {
+    showCopyState(btn, '暂无信息');
+    return;
+  }
+  try {
+    await copyText(ipInfoText);
+    showCopyState(btn, '已复制');
+  } catch (e) {
+    showCopyState(btn, '复制失败');
+  }
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+}
+
+function showCopyState(btn, text) {
+  if (!btn) return;
+  clearTimeout(btn._copyTimer);
+  const original = btn.dataset.originalText || btn.textContent;
+  btn.dataset.originalText = original;
+  btn.textContent = text;
+  btn._copyTimer = setTimeout(() => { btn.textContent = original; }, 1600);
 }
 
 /* ══════════════════════════════════════
