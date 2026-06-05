@@ -52,7 +52,7 @@ html,body{height:100%;font-family:'PingFang SC','Microsoft YaHei',sans-serif;col
 .tips-body li:last-child{color:var(--amber);font-weight:500}
 
 /* Tool cards */
-.tool-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:680px}
+.tool-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px}
 .tc{
   background:var(--surface);border-radius:var(--r-lg);border:1.5px solid var(--border);
   padding:28px 22px;cursor:pointer;transition:all .2s;
@@ -251,7 +251,43 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
   padding:6px 16px;font-size:11px;color:#92400e;flex-shrink:0;
 }
 
-@media(max-width:640px){.tool-cards{grid-template-columns:1fr}}
+/* ── RMB uppercase converter ── */
+.money-wrap{flex:1;overflow:auto;padding:40px 24px}
+.money-panel{width:100%;max-width:760px;margin:0 auto}
+.money-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:24px;
+}
+.money-label{font-size:13px;font-weight:600;margin-bottom:10px;color:#444}
+.money-input{
+  width:100%;font-size:28px;font-family:inherit;padding:14px 16px;
+  border:1.5px solid var(--border);border-radius:8px;color:var(--text);
+  outline:none;background:#fff;
+}
+.money-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.money-result{
+  margin-top:18px;border:1px solid var(--border-light);border-radius:8px;
+  background:#fafaf6;padding:18px;min-height:88px;
+}
+.money-output{font-size:24px;font-weight:700;line-height:1.7;word-break:break-all}
+.money-placeholder{font-size:14px;color:var(--sub);line-height:1.8}
+.money-error{font-size:13px;color:var(--danger);margin-top:10px;display:none}
+.money-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.money-btn{
+  font-size:13px;font-family:inherit;padding:8px 14px;border-radius:6px;
+  border:1px solid var(--border);background:#fff;color:#444;cursor:pointer;
+}
+.money-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.money-btn:hover{border-color:var(--blue);color:var(--blue)}
+.money-btn.primary:hover{background:var(--blue-d);border-color:var(--blue-d);color:#fff}
+.money-examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.money-chip{
+  font-size:12px;font-family:inherit;padding:5px 9px;border-radius:999px;
+  border:1px solid var(--border);background:#fff;color:var(--muted);cursor:pointer;
+}
+.money-chip:hover{border-color:var(--blue);color:var(--blue)}
+
+@media(max-width:760px){.tool-cards{grid-template-columns:1fr}.money-input{font-size:22px}.money-output{font-size:20px}}
 
 /* ── 赞赏区 ── */
 .tip-wrap{width:100%;max-width:680px;margin-top:16px}
@@ -327,6 +363,12 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
       <div class="tc-icon">📱</div>
       <div class="tc-name">报销截图排版工具</div>
       <div class="tc-desc">上传支付宝/微信付款截图，A4 每页 2 行 × 3 列，中间留有对折撕开线。</div>
+      <div class="tc-enter">进入工具 →</div>
+    </div>
+    <div class="tc" onclick="showView('money')">
+      <div class="tc-icon">💴</div>
+      <div class="tc-name">人民币大写转换</div>
+      <div class="tc-desc">输入阿拉伯数字金额，立即转换为费用报销单可填写的人民币大写格式。</div>
       <div class="tc-enter">进入工具 →</div>
     </div>
   </div>
@@ -415,6 +457,41 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
       </div>
     </main>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RMB UPPERCASE TOOL
+══════════════════════════════════════ -->
+<div id="v-money" class="tool-view">
+  <div class="topbar">
+    <button class="btn-back" onclick="showView('home')">← 首页</button>
+    <span class="topbar-title">人民币大写转换</span>
+    <span class="topbar-badge">金额 · 大写</span>
+    <button class="btn-switch" onclick="showView('inv')">切换到发票工具 →</button>
+  </div>
+  <main class="money-wrap">
+    <section class="money-panel">
+      <div class="money-card">
+        <div class="money-label">阿拉伯数字金额</div>
+        <input class="money-input" id="money-input" type="text" inputmode="decimal" autocomplete="off" placeholder="例如：1234.56" oninput="renderMoneyUpper()" onkeydown="handleMoneyKey(event)">
+        <div class="money-error" id="money-error"></div>
+        <div class="money-result">
+          <div class="money-placeholder" id="money-placeholder">输入金额后，这里会显示人民币大写。</div>
+          <div class="money-output" id="money-output"></div>
+        </div>
+        <div class="money-actions">
+          <button class="money-btn primary" onclick="copyMoneyUpper()">复制大写金额</button>
+          <button class="money-btn" onclick="clearMoneyUpper()">清空</button>
+        </div>
+        <div class="money-examples">
+          <button class="money-chip" onclick="setMoneyExample('0')">0</button>
+          <button class="money-chip" onclick="setMoneyExample('1000')">1000</button>
+          <button class="money-chip" onclick="setMoneyExample('1001.05')">1001.05</button>
+          <button class="money-chip" onclick="setMoneyExample('123456.78')">123456.78</button>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -542,10 +619,13 @@ function showView(v) {
   document.getElementById('v-home').style.display = v==='home' ? '' : 'none';
   const inv = document.getElementById('v-inv');
   const ss  = document.getElementById('v-ss');
+  const money = document.getElementById('v-money');
   inv.classList.toggle('active', v==='inv');
   ss.classList.toggle('active',  v==='ss');
+  money.classList.toggle('active', v==='money');
   if (v==='inv') { renderInvList(); renderInvPreview(); }
   if (v==='ss')  { renderSSList();  renderSSPreview();  }
+  if (v==='money') { renderMoneyUpper(); setTimeout(()=>document.getElementById('money-input').focus(), 0); }
 }
 
 /* ══════════════════════════════════════
@@ -1068,6 +1148,122 @@ async function exportSSPDF() {
     setProg(100,'完成！'); await new Promise(r=>setTimeout(r,700));
   } catch(e){ alert('导出失败：'+e.message); }
   finally{ showProg(false); }
+}
+
+/* ══════════════════════════════════════
+   ── RMB UPPERCASE TOOL ──
+══════════════════════════════════════ */
+function parseMoneyCents(raw) {
+  const s = String(raw).trim().replace(/[￥¥,\s]/g, '');
+  if (!s) return null;
+  if (!/^(0|[1-9]\d*)(\.\d{0,2})?$/.test(s)) {
+    throw new Error('请输入非负金额，最多保留两位小数');
+  }
+  const [yuan, frac=''] = s.split('.');
+  const cents = BigInt(yuan) * 100n + BigInt((frac + '00').slice(0, 2));
+  if (cents > 99999999999999n) {
+    throw new Error('金额不能超过 999999999999.99');
+  }
+  return cents;
+}
+
+function groupToRMBUpper(num) {
+  const digits = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
+  const units = ['','拾','佰','仟'];
+  let out = '', hasZero = false;
+  for (let pos = 3; pos >= 0; pos--) {
+    const div = 10 ** pos;
+    const digit = Math.floor(num / div) % 10;
+    if (!digit) {
+      if (out) hasZero = true;
+      continue;
+    }
+    if (hasZero) out += '零';
+    out += digits[digit] + units[pos];
+    hasZero = false;
+  }
+  return out;
+}
+
+function integerToRMBUpper(integerText) {
+  const groupUnits = ['','万','亿','兆'];
+  const groups = [];
+  for (let end = integerText.length; end > 0; end -= 4) {
+    groups.push(Number(integerText.slice(Math.max(0, end - 4), end)));
+  }
+  let out = '', needZero = false;
+  for (let i = groups.length - 1; i >= 0; i--) {
+    const group = groups[i];
+    if (!group) {
+      if (out) needZero = true;
+      continue;
+    }
+    if (out && (needZero || group < 1000)) out += '零';
+    out += groupToRMBUpper(group) + groupUnits[i];
+    needZero = false;
+  }
+  return out || '零';
+}
+
+function amountToRMBUpper(raw) {
+  const cents = parseMoneyCents(raw);
+  if (cents === null) return '';
+  if (cents === 0n) return '零元整';
+  const digits = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
+  const yuan = cents / 100n;
+  const jiao = Number((cents % 100n) / 10n);
+  const fen = Number(cents % 10n);
+  let out = integerToRMBUpper(yuan.toString()) + '元';
+  if (!jiao && !fen) return out + '整';
+  if (jiao) out += digits[jiao] + '角';
+  else if (yuan > 0n && fen) out += '零';
+  if (fen) out += digits[fen] + '分';
+  return out;
+}
+
+function renderMoneyUpper() {
+  const input = document.getElementById('money-input');
+  const output = document.getElementById('money-output');
+  const placeholder = document.getElementById('money-placeholder');
+  const error = document.getElementById('money-error');
+  try {
+    const text = amountToRMBUpper(input.value);
+    output.textContent = text;
+    placeholder.style.display = text ? 'none' : '';
+    error.style.display = 'none';
+  } catch (e) {
+    output.textContent = '';
+    placeholder.style.display = '';
+    error.textContent = e.message;
+    error.style.display = '';
+  }
+}
+
+async function copyMoneyUpper() {
+  const text = document.getElementById('money-output').textContent;
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+}
+
+function clearMoneyUpper() {
+  document.getElementById('money-input').value = '';
+  renderMoneyUpper();
+  document.getElementById('money-input').focus();
+}
+
+function setMoneyExample(value) {
+  document.getElementById('money-input').value = value;
+  renderMoneyUpper();
+}
+
+function handleMoneyKey(e) {
+  if (e.key === 'Enter') copyMoneyUpper();
 }
 
 /* ══════════════════════════════════════
