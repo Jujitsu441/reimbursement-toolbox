@@ -401,10 +401,16 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 .ip-result{min-height:280px;overflow:hidden}
 .ip-status{padding:16px 18px;border-bottom:1px solid var(--border-light);background:#fcfcfa;font-size:13px;color:#666}
 .ip-main{padding:22px}
+.ip-address-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
 .ip-address{
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   font-size:30px;font-weight:800;letter-spacing:0;color:#1f2937;word-break:break-all;
-  margin-bottom:18px;
+  line-height:1.2;
+}
+.ip-type{
+  flex-shrink:0;margin-top:5px;padding:3px 7px;border-radius:5px;
+  background:var(--blue-light);color:var(--blue);border:1px solid #bfdbfe;
+  font-size:11px;font-weight:800;letter-spacing:.4px;
 }
 .ip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .ip-field{border:1px solid var(--border-light);border-radius:7px;padding:10px 12px;background:#fbfbf8}
@@ -1615,6 +1621,7 @@ async function queryMyIP() {
 }
 
 function renderIPInfo(info) {
+  const ipType = getIPType(info.ip);
   const fields = [
     ['国家/地区', info.country || '—'],
     ['省/州', info.region || '—'],
@@ -1625,15 +1632,26 @@ function renderIPInfo(info) {
   ];
   ipInfoText = [
     `IP：${info.ip || ''}`,
+    `IP 类型：${ipType}`,
     ...fields.map(([k,v]) => `${k}：${v}`),
     `数据接口：${info.source}`,
   ].join('\n');
   document.getElementById('ip-main').innerHTML = `
-    <div class="ip-address">${esc(info.ip || '—')}</div>
+    <div class="ip-address-row">
+      <div class="ip-address">${esc(info.ip || '—')}</div>
+      <span class="ip-type">${ipType}</span>
+    </div>
     <div class="ip-grid">
       ${fields.map(([k,v]) => `<div class="ip-field"><div class="ip-field-label">${k}</div><div class="ip-field-value">${esc(v)}</div></div>`).join('')}
     </div>
   `;
+}
+
+function getIPType(ip) {
+  if (!ip) return '未知';
+  if (ip.includes(':')) return 'IPv6';
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)) return 'IPv4';
+  return '未知';
 }
 
 async function copyIPInfo() {
