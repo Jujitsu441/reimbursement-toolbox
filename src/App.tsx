@@ -917,7 +917,10 @@ function HolidayTool() {
               {summary}
             </div>
             <p className="mt-3 text-xs leading-5 text-muted-foreground">
-              倒计时按本机日期计算。灰色表示已过去，红色表示当前假期，绿色表示尚未到来。
+              倒计时按本机日期计算。
+              <span className="text-muted-foreground">灰色表示已过去</span>，
+              <span className="text-primary">红色表示当前假期</span>，
+              <span className="text-[#3c7a5a]">绿色表示尚未到来</span>。
             </p>
           </CardContent>
         </Card>
@@ -947,12 +950,18 @@ function HolidayTool() {
                     className={cn(
                       "border-b border-border last:border-0",
                       status === "past" && "text-muted-foreground opacity-70",
-                      status === "current" && "bg-accent/60",
-                      status === "upcoming" && "bg-card"
+                      status === "current" && "bg-accent/60 text-primary",
+                      status === "upcoming" && "bg-card text-[#3c7a5a]"
                     )}
                   >
                     <td className="px-3 py-3">
-                      <Badge variant={status === "current" ? "default" : "secondary"}>
+                      <Badge
+                        variant={status === "current" ? "default" : "secondary"}
+                        className={cn(
+                          status === "past" && "text-muted-foreground",
+                          status === "upcoming" && "bg-[#edf4ee] text-[#3c7a5a]"
+                        )}
+                      >
                         {holiday.name}
                       </Badge>
                     </td>
