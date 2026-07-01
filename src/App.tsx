@@ -16,9 +16,11 @@ import {
   Grid2X2,
   Home,
   Minus,
+  Moon,
   Plus,
   RotateCcw,
   Search,
+  Sun,
   Trash2,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
@@ -78,6 +80,7 @@ type IpInfo = {
 }
 
 type IpStatus = "idle" | "loading" | "done" | "error"
+type ThemeMode = "light" | "dark"
 
 const MM_TO_PX = 3.7795275591
 const A4_MM = { width: 210, height: 297 }
@@ -110,6 +113,7 @@ class InlineBinaryDataFactory {
 
 function App() {
   const [view, setView] = useState<View>("home")
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => readThemeMode())
   const [invoiceFiles, setInvoiceFiles] = useState<MaterialFile[]>([])
   const [screenshotFiles, setScreenshotFiles] = useState<MaterialFile[]>([])
   const [invoiceMargin, setInvoiceMargin] = useState(8)
@@ -127,6 +131,11 @@ function App() {
     value: 0,
     text: "",
   })
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", themeMode === "dark")
+    writeThemeMode(themeMode)
+  }, [themeMode])
 
   useEffect(() => {
     const prevent = (event: DragEvent) => event.preventDefault()
@@ -305,16 +314,26 @@ function App() {
     }
   }
 
+  const toggleThemeMode = () => {
+    setThemeMode((mode) => (mode === "dark" ? "light" : "dark"))
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Toaster richColors position="top-center" />
       {view === "home" ? (
-        <HomeView setView={setView} />
+        <HomeView
+          setView={setView}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
+        />
       ) : view === "invoice" ? (
         <ToolShell
           title="发票排版"
           badge="A4 · 每页 2 张"
           onHome={() => setView("home")}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
         >
           <InvoiceTool
             files={invoiceFiles}
@@ -342,6 +361,8 @@ function App() {
           title="付款截图排版"
           badge="A4 · 2 行 × 3 列"
           onHome={() => setView("home")}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
         >
           <ScreenshotTool
             files={screenshotFiles}
@@ -367,6 +388,8 @@ function App() {
           title="人民币大写"
           badge="金额 · 大写"
           onHome={() => setView("home")}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
         >
           <MoneyTool
             value={moneyInput}
@@ -381,6 +404,8 @@ function App() {
           title="2026 放假安排"
           badge="节假日 · 调休"
           onHome={() => setView("home")}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
         >
           <HolidayTool />
         </ToolShell>
@@ -389,6 +414,8 @@ function App() {
           title="IP 地址查询"
           badge="公网 IP · 归属地"
           onHome={() => setView("home")}
+          themeMode={themeMode}
+          onToggleTheme={toggleThemeMode}
         >
           <IpTool
             status={ipStatus}
@@ -403,7 +430,15 @@ function App() {
   )
 }
 
-function HomeView({ setView }: { setView: (view: View) => void }) {
+function HomeView({
+  setView,
+  themeMode,
+  onToggleTheme,
+}: {
+  setView: (view: View) => void
+  themeMode: ThemeMode
+  onToggleTheme: () => void
+}) {
   const [visitCount, setVisitCount] = useState<number | null>(null)
 
   useEffect(() => {
@@ -435,7 +470,7 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 px-5 py-10">
       <header className="flex flex-col gap-5">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 flex-col gap-2">
             <div className="flex items-center gap-3">
               <span className="size-2 rounded-full bg-primary" />
@@ -447,8 +482,9 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
               把报销材料整理成能直接打印、粘贴、填写的格式。
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
             {visitCount === null ? null : <VisitCounter total={visitCount} />}
+            <ThemeToggle mode={themeMode} onToggle={onToggleTheme} />
             <Popover>
               <PopoverTrigger render={<Button variant="outline" size="sm" />}>
                 <Coffee data-icon="inline-start" />
@@ -560,6 +596,33 @@ function VisitCounter({ total }: { total: number }) {
   )
 }
 
+function ThemeToggle({
+  mode,
+  onToggle,
+  compact = false,
+}: {
+  mode: ThemeMode
+  onToggle: () => void
+  compact?: boolean
+}) {
+  const isDark = mode === "dark"
+  const label = isDark ? "浅色模式" : "深色模式"
+  const Icon = isDark ? Sun : Moon
+
+  return (
+    <Button
+      variant="outline"
+      size={compact ? "icon-sm" : "sm"}
+      onClick={onToggle}
+      title={label}
+      aria-label={label}
+    >
+      <Icon data-icon={compact ? undefined : "inline-start"} />
+      {compact ? null : label}
+    </Button>
+  )
+}
+
 function HomeAction({
   icon: Icon,
   title,
@@ -627,11 +690,15 @@ function ToolShell({
   title,
   badge,
   onHome,
+  themeMode,
+  onToggleTheme,
   children,
 }: {
   title: string
   badge: string
   onHome: () => void
+  themeMode: ThemeMode
+  onToggleTheme: () => void
   children: ReactNode
 }) {
   return (
@@ -650,6 +717,7 @@ function ToolShell({
           <strong>{title}</strong>
           <Badge variant="secondary">{badge}</Badge>
         </div>
+        <ThemeToggle mode={themeMode} onToggle={onToggleTheme} compact />
       </header>
       {children}
     </div>
@@ -961,7 +1029,7 @@ function HolidayTool() {
               倒计时按本机日期计算。
               <span className="text-muted-foreground">灰色表示已过去</span>，
               <span className="text-primary">红色表示当前假期</span>，
-              <span className="text-[#3c7a5a]">绿色表示尚未到来</span>。
+              <span className="text-[var(--local-green)]">绿色表示尚未到来</span>。
             </p>
           </CardContent>
         </Card>
@@ -992,7 +1060,7 @@ function HolidayTool() {
                       "border-b border-border last:border-0",
                       status === "past" && "text-muted-foreground opacity-70",
                       status === "current" && "bg-accent/60 text-primary",
-                      status === "upcoming" && "bg-card text-[#3c7a5a]"
+                      status === "upcoming" && "bg-card text-[var(--local-green)]"
                     )}
                   >
                     <td className="px-3 py-3">
@@ -1000,7 +1068,8 @@ function HolidayTool() {
                         variant={status === "current" ? "default" : "secondary"}
                         className={cn(
                           status === "past" && "text-muted-foreground",
-                          status === "upcoming" && "bg-[#edf4ee] text-[#3c7a5a]"
+                          status === "upcoming" &&
+                            "bg-[color-mix(in_oklch,var(--local-green),transparent_88%)] text-[var(--local-green)]"
                         )}
                       >
                         {holiday.name}
@@ -1784,6 +1853,25 @@ function isVisitResponse(value: unknown): value is { total: number } {
 
 function formatVisitCount(total: number) {
   return new Intl.NumberFormat("zh-CN").format(total)
+}
+
+function readThemeMode(): ThemeMode {
+  if (typeof window === "undefined") return "light"
+  try {
+    return window.localStorage.getItem("reimbursement.theme") === "dark"
+      ? "dark"
+      : "light"
+  } catch {
+    return "light"
+  }
+}
+
+function writeThemeMode(mode: ThemeMode) {
+  try {
+    window.localStorage.setItem("reimbursement.theme", mode)
+  } catch {
+    // 外观偏好保存失败时，只影响下次打开的默认主题。
+  }
 }
 
 function readVisitCountCache() {

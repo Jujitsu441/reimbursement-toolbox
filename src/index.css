@@ -51,12 +51,34 @@
   --local-green: #3c7a5a;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
     "Microsoft YaHei", sans-serif;
-  color: #1c1b18;
-  background: #f6f4ee;
+  color: var(--foreground);
+  background: var(--background);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root.dark {
+  --background: #171512;
+  --foreground: #f4f0e8;
+  --card: #211f1b;
+  --card-foreground: #f4f0e8;
+  --popover: #24211d;
+  --popover-foreground: #f4f0e8;
+  --primary: #d86a56;
+  --primary-foreground: #1f120f;
+  --secondary: #312d26;
+  --secondary-foreground: #eee7db;
+  --muted: #2a2722;
+  --muted-foreground: #b9b0a2;
+  --accent: #3b2520;
+  --accent-foreground: #f0b0a3;
+  --destructive: #ff8a7a;
+  --border: #403a31;
+  --input: #403a31;
+  --ring: #d86a56;
+  --local-green: #82c49d;
 }
 
 * {
@@ -67,7 +89,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #f6f4ee;
+  background: var(--background);
 }
 
 button,
