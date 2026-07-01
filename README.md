@@ -1,50 +1,58 @@
-# 报销工具箱 Cloudflare Pages 部署
+# 报销工具箱
 
-这是一个静态 HTML 工具，部署目录为 `public/`。
+React + Vite + Tailwind CSS + shadcn/ui 版本。日常交付物仍然是一个可直接双击打开的离线 HTML 文件。
 
-## 本地预览
+## 日常使用
+
+直接打开：
+
+```text
+dist/index.html
+```
+
+这个文件由 `vite-plugin-singlefile` 生成，JS 和 CSS 已内联；Vite 配置里设置了 `base: './'`，并关闭了 `public` 目录复制，避免 `file://` 下出现资源路径问题。
+
+## 修改源码
+
+主要改这里：
+
+```text
+src/App.tsx
+src/index.css
+src/components/ui/
+```
+
+主题色、圆角、字体栈在 `src/index.css`；首页、上传、排版、导出逻辑在 `src/App.tsx`。
+
+## 重新生成离线 HTML
 
 ```sh
-npm run preview
+pnpm install
+pnpm build:single
 ```
 
-## 部署到 Cloudflare Pages
+生成后使用 `dist/index.html`。
+
+## 验证
 
 ```sh
-npm run deploy
+pnpm build:single
+node scripts/verify-file-build.mjs
+node scripts/verify-workflow.mjs
 ```
 
-首次部署时 Wrangler 会要求登录 Cloudflare，并创建/使用名为 `reimbursement-toolbox` 的 Pages 项目。部署成功后访问：
-
-```text
-https://reimbursement-toolbox.pages.dev
-```
-
-如果在 Codex/非交互式终端中部署，需要先提供 Cloudflare API Token：
+验证脚本需要先启动一个带远程调试端口的 Chrome，例如：
 
 ```sh
-export CLOUDFLARE_API_TOKEN="你的 Cloudflare API Token"
-npm run deploy
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new \
+  --remote-debugging-port=9333 \
+  --user-data-dir=/private/tmp/reimb-chrome-codex \
+  "about:blank"
 ```
 
-## GitHub 自动部署
+`verify-file-build.mjs` 检查 `file://` 首屏、非本地请求和控制台错误。`verify-workflow.mjs` 覆盖发票 PDF 拖拽上传、加印、导出、切换到付款截图工具、截图拖拽上传、导出、再切回发票工具确认状态保留。
 
-仓库推送到 GitHub 后，`.github/workflows/deploy-cloudflare-pages.yml` 会在 `main` 分支更新时自动部署到 Cloudflare Pages 项目：
+## 可选部署
 
-```text
-reimbursement-toolbox
-```
-
-需要在 GitHub 仓库的 `Settings` → `Secrets and variables` → `Actions` 中添加两个 Repository secrets：
-
-```text
-CLOUDFLARE_ACCOUNT_ID
-CLOUDFLARE_API_TOKEN
-```
-
-`CLOUDFLARE_API_TOKEN` 建议使用短权限令牌，至少包含：
-
-```text
-Cloudflare Pages:Edit
-Account Settings:Read
-```
+如果仍需要部署 Cloudflare Pages，可以把 `dist/index.html` 作为静态产物上传；当前项目的主要交付形态仍是离线单文件。
