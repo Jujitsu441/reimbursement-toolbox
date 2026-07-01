@@ -445,41 +445,352 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
   .money-output-panel{min-height:220px}
 }
 
-/* ── 赞赏区 ── */
-.tip-wrap{width:100%;max-width:680px;margin-top:16px}
-.tip-card{
-  border-radius:var(--r-lg);border:1px solid var(--border);
-  background:var(--surface);overflow:hidden;
+/* ── Notion-inspired quiet workspace skin ── */
+:root{
+  --blue:#2f3437;--blue-d:#1f2326;--blue-light:#f1f1ef;
+  --amber:#9f6b2f;--amber-light:#fbf3e4;--amber-border:#ead8bb;
+  --danger:#b42318;--danger-light:#fdf0ed;
+  --bg:#f6f4ee;--surface:#fffefc;
+  --border:#e6e1d3;--border-light:#efeadf;
+  --text:#1c1b18;--muted:#6b675e;--sub:#a6a192;
+  --r:5px;--r-lg:7px;
+  --seal:#b2402f;--seal-tint:#f7e7e1;--seal-ink:#7a2b1f;
+  --green:#3c7a5a;--green-tint:#e6efe7;
 }
-.tip-toggle{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 20px;font-size:13px;color:#6b6b64;
-  cursor:pointer;user-select:none;transition:background .15s;gap:8px;
+html,body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--text);background:var(--bg);
 }
-.tip-toggle:hover{background:#fafaf6}
-.tip-arrow{font-size:12px;transition:transform .2s;flex-shrink:0;color:var(--sub)}
-.tip-card.open .tip-arrow{transform:rotate(180deg)}
-.tip-body{
-  display:none;grid-template-columns:1fr 190px;align-items:center;
-  padding:24px 20px;gap:20px;border-top:1px solid var(--border-light);
+button,input{font-family:inherit}
+button:focus-visible,input:focus-visible,.tc:focus-visible,.zone:focus-visible{
+  outline:2px solid #2f3437;outline-offset:2px;
 }
-.tip-card.open .tip-body{display:grid}
-.tip-copy{min-width:0}
-.tip-title{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
-.tip-desc{font-size:13px;line-height:1.8;color:#666;max-width:360px}
-.tip-plate{
-  justify-self:end;background:#f8f8f4;border:1px solid var(--border-light);
-  border-radius:12px;padding:14px 10px 12px;text-align:center;
+
+#v-home{
+  background:
+    linear-gradient(90deg,rgba(55,53,47,.035) 1px,transparent 1px),
+    linear-gradient(180deg,rgba(55,53,47,.03) 1px,transparent 1px),
+    var(--bg);
+  background-size:32px 32px;
+  padding:34px 24px 52px;
 }
-.tip-qr{
-  display:block;width:168px;height:auto;border-radius:8px;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
+.home-shell{
+  max-width:1160px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:34px;box-shadow:0 1px 2px rgba(15,15,15,.03);
 }
-.tip-note{margin-top:6px;font-size:11px;color:var(--sub)}
-@media(max-width:640px){
-  .tip-body{grid-template-columns:1fr;justify-items:center;text-align:left;padding:28px 20px 24px;gap:22px}
-  .tip-plate{justify-self:center}
-  .tip-desc{max-width:none}
+.home-top{
+  align-items:flex-start;border-bottom:1px solid var(--border-light);
+  padding-bottom:26px;margin-bottom:24px;
+}
+.home-kicker{
+  color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.home-title{font-size:38px;font-weight:760;color:var(--text);line-height:1.15;margin-bottom:10px}
+.home-sub{max-width:620px;color:var(--muted);font-size:14px;line-height:1.75}
+.home-status{
+  background:#fbfaf8;border-color:var(--border-light);border-radius:7px;
+  box-shadow:none;padding:10px 12px;
+}
+.home-stat-num{font-size:20px;color:var(--text);font-weight:720}
+.home-stat-label{color:var(--muted)}
+.home-grid{grid-template-columns:300px 1fr;gap:22px}
+
+.tips-card,.tool-section,.money-editor,.money-output-panel,
+.holiday-summary,.holiday-table,.holiday-note,.ip-card,.ip-result{
+  background:var(--surface);border-color:var(--border);border-radius:7px;
+  box-shadow:none;
+}
+.tips-card{top:24px;padding:18px}
+.tips-head,.tool-section-title,.tc-name,.ip-card-title{
+  color:var(--text);font-weight:720;
+}
+.tips-body{color:#4f4d49}
+.tips-body li{
+  background:transparent;border-radius:5px;padding:7px 6px;
+}
+.tips-body li:hover{background:#f7f6f3}
+.tips-body li::before{
+  background:#eceae5;color:#5f5d59;border-radius:4px;
+}
+.tips-body li:last-child{
+  background:#fbf3e4;color:#8f5c20;font-weight:600;
+}
+.tips-body li:last-child::before{background:#efe0c8;color:#80521d}
+
+.tool-board{gap:16px}
+.tool-section{padding:16px}
+.tool-section-head{margin-bottom:12px}
+.tool-section-sub{color:var(--muted)}
+.tool-cards,.utility-list{gap:8px}
+.tc{
+  background:transparent;border-color:transparent;border-radius:6px;
+  min-height:176px;padding:15px;box-shadow:none;transition:background .12s,border-color .12s;
+}
+.tc:hover{
+  background:#f7f6f3;border-color:var(--border-light);
+  box-shadow:none;transform:none;
+}
+.tc-icon{font-size:25px;margin-bottom:12px}
+.tc-desc{color:#6f6d68;line-height:1.65}
+.tc-enter{color:#5f5d59;font-weight:600}
+.utility-list .tc{min-height:126px}
+
+.topbar{
+  height:48px;background:var(--surface);border-bottom-color:var(--border);
+  padding:0 14px;
+}
+.topbar-title{color:var(--text);font-weight:650;letter-spacing:0}
+.topbar-badge{
+  background:#f1f1ef;color:var(--muted);border:1px solid var(--border-light);
+}
+.btn-back,.btn-switch,.money-btn,.money-chip,.zoom-btn,.btn-clear,.double-btn{
+  border-color:var(--border);background:transparent;color:var(--muted);
+  border-radius:5px;box-shadow:none;
+}
+.btn-back:hover,.btn-switch:hover,.money-btn:hover,.money-chip:hover,.zoom-btn:hover{
+  background:#f1f1ef;border-color:#d8d6d0;color:var(--text);
+}
+.btn-export,.money-btn.primary{
+  background:#2f3437;border-color:#2f3437;color:#fff;border-radius:5px;
+  font-weight:600;
+}
+.btn-export:hover,.money-btn.primary:hover{background:#1f2326;border-color:#1f2326;color:#fff}
+.btn-export:disabled{background:#d9d7d1;color:#fff}
+.btn-clear{color:var(--danger);border-color:#f0c9c4}
+.btn-clear:hover{background:var(--danger-light);color:var(--danger)}
+
+.tool-view{background:var(--bg)}
+.tool-body{grid-template-columns:304px 1fr}
+.sidebar{background:var(--surface);border-right-color:var(--border)}
+.sec{border-bottom-color:var(--border-light);padding:13px 14px}
+.sec-title{color:var(--muted);letter-spacing:.06em}
+.zone{
+  background:#fbfaf8;border-color:#d8d6d0;border-radius:7px;
+}
+.zone:hover,.zone.over{
+  background:#f1f1ef;border-color:#aaa7a0;
+}
+.zone p,.slabel,.iname,.ip-field-value{color:var(--text)}
+.zone p strong{color:var(--text)}
+input[type=number]{
+  border-color:var(--border);background:#fbfaf8;color:var(--text);
+}
+input[type=checkbox]{accent-color:#2f3437}
+.file-list{padding:8px}
+.item{
+  background:transparent;border-color:transparent;border-radius:5px;
+}
+.item:hover,.item.drag-target{background:#f7f6f3;border-color:var(--border-light)}
+.double-btn:hover,.double-btn.on{
+  border-color:var(--amber-border);background:var(--amber-light);color:var(--amber);
+}
+.badge-x2{background:var(--amber-light);border-color:var(--amber-border);color:var(--amber)}
+
+.inv-hint{
+  background:#fbf3e4;border-bottom-color:#ead8bb;color:#80521d;
+}
+.preview-bar{background:var(--surface);border-bottom-color:var(--border)}
+.preview-scroll,.money-wrap,.simple-wrap{background:var(--bg)}
+.a4{border:1px solid #dedbd3;box-shadow:0 6px 24px rgba(15,15,15,.08)}
+.prog{background:rgba(247,246,243,.9)}
+.pbar-wrap{background:#e8e5dd}.pbar{background:#2f3437}
+
+.money-input{
+  border-color:#d8d6d0;background:#fbfaf8;color:var(--text);
+  font-weight:650;box-shadow:none;
+}
+.money-input:focus{border-color:#aaa7a0;box-shadow:0 0 0 2px rgba(55,53,47,.12)}
+.money-result-head,.ip-status{background:#fbfaf8;border-bottom-color:var(--border-light)}
+.money-result{
+  background:
+    linear-gradient(90deg,rgba(55,53,47,.08) 0 3px,transparent 3px),
+    repeating-linear-gradient(0deg,#fffefc,#fffefc 35px,#f3f1ea 36px);
+}
+.money-output{color:var(--text);font-weight:760}
+.source-link{color:#5f5d59}
+.source-link:hover{color:var(--text)}
+.holiday-table th{background:#fbfaf8;color:var(--muted)}
+.holiday-table tr.current{background:#fbf3e4}
+.holiday-table tr.current .holiday-name{background:#efe0c8;color:#80521d}
+.holiday-table tr.upcoming .holiday-name{background:#eef3e8;color:#4f6f35}
+.holiday-next strong{color:#80521d}
+.ip-version-card,.ip-field{
+  border-color:var(--border-light);background:#fbfaf8;border-radius:6px;
+}
+.ip-address{color:var(--text);font-weight:760}
+.ip-type{background:#f1f1ef;color:#5f5d59;border-color:var(--border)}
+@media(max-width:900px){
+  #v-home{padding:14px;background-size:24px 24px}
+  .home-shell{padding:22px;border-radius:8px}
+  .home-top{padding-bottom:18px}
+  .home-title{font-size:30px}
+  .home-grid{grid-template-columns:1fr}
+  .tool-body{grid-template-columns:1fr}
+  .sidebar{border-right:none;border-bottom:1px solid var(--border)}
+}
+
+/* ── Home IA refactor: start from the user's material ── */
+#v-home{
+  background:var(--bg);
+  padding:38px 22px 56px;
+}
+.home-shell{
+  width:100%;max-width:1080px;margin:0 auto;
+  background:transparent;border:none;border-radius:0;padding:0;box-shadow:none;
+}
+.home-top{
+  display:block;border-bottom:none;margin-bottom:24px;padding-bottom:0;
+}
+.home-meta{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:22px;
+}
+.home-kicker{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border:1px solid #d5cebb;
+  border-radius:999px;background:transparent;color:var(--muted);
+  font-size:11px;font-weight:650;letter-spacing:.04em;text-transform:none;
+}
+.home-kicker::before{
+  content:"";width:6px;height:6px;border-radius:999px;background:var(--green);
+}
+.home-title-line{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.home-title-row{display:flex;align-items:flex-end;gap:14px;min-width:0}
+.seal-mark{
+  width:10px;height:10px;border-radius:999px;background:var(--seal);
+  margin-bottom:10px;flex-shrink:0;
+}
+.home-title{
+  font-size:38px;line-height:1.12;margin-bottom:0;
+  font-weight:760;color:var(--text);letter-spacing:-.02em;
+}
+.home-sub{
+  max-width:560px;font-size:14.5px;line-height:1.7;color:var(--muted);
+  margin-top:10px;
+}
+.home-status{display:none}
+.home-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;
+  align-items:stretch;
+}
+.home-section-label{
+  margin:0 0 12px 2px;color:var(--sub);font-size:12.5px;font-weight:680;
+}
+.tool-board{
+  display:flex;flex-direction:column;background:#fffefc;border:1px solid var(--border);
+  border-radius:14px;padding:0;box-shadow:none;overflow:hidden;
+}
+.tool-board .home-section-label{padding:20px 24px 4px;margin:0}
+.primary-actions{display:grid;grid-template-rows:repeat(3,1fr);gap:0;flex:1}
+.home-action{
+  width:100%;display:grid;grid-template-columns:46px minmax(0,1fr) auto;
+  align-items:center;gap:16px;padding:22px 24px;border:0;border-top:1px solid var(--border);
+  border-radius:0;background:transparent;text-align:left;color:var(--text);
+  cursor:pointer;transition:background .12s,border-color .12s;
+}
+.home-action:hover{
+  background:#faf9f5;
+}
+.action-icon{
+  width:42px;height:42px;display:grid;place-items:center;border-radius:11px;
+  background:var(--seal-tint);color:var(--seal-ink);
+}
+.action-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.action-copy{display:grid;gap:8px;min-width:0}
+.action-kicker{font-size:12px;color:#8a8883;font-weight:650}
+.action-title{font-size:15.5px;color:var(--text);font-weight:700;line-height:1.25}
+.action-desc{font-size:12.5px;color:var(--muted);line-height:1.65;max-width:560px}
+.action-enter{
+  display:inline-flex;align-items:center;gap:4px;justify-content:center;
+  min-width:62px;height:34px;padding:0 13px;border:1px solid #d5cebb;
+  border-radius:8px;align-self:center;color:var(--muted);
+  font-size:13px;font-weight:650;white-space:nowrap;
+}
+.home-action:hover .action-enter{
+  border-color:var(--seal);background:var(--seal-tint);color:var(--seal-ink);
+}
+
+.tips-card{
+  position:static;display:flex;flex-direction:column;height:100%;
+  padding:0;background:#fffefc;
+  border:1px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.tips-head{font-size:13px;margin:0;padding:20px 24px 3px;color:var(--sub);font-weight:680}
+.tips-sub{font-size:12px;color:var(--sub);padding:0 24px 14px;line-height:1.5}
+.tips-body{flex:1;padding:2px 24px 20px}
+.tips-body ol{gap:0;height:100%}
+.tips-body li{
+  position:relative;grid-template-columns:24px 1fr;gap:12px;padding:9px 0;
+  color:var(--text);font-size:13px;line-height:1.55;background:transparent;
+}
+.tips-body li::before{
+  width:22px;height:22px;border-radius:999px;font-size:11px;
+  border:1px solid #d5cebb;background:#fffefc;color:var(--muted);
+  position:relative;z-index:1;
+}
+.tips-body li:not(:last-child)::after{
+  content:"";position:absolute;left:11px;top:32px;bottom:-10px;
+  border-left:1.5px dashed #d5cebb;
+}
+.tips-body li:last-child{background:transparent;color:var(--seal-ink);font-weight:650}
+.tips-body li:last-child::before{background:var(--seal);border-color:var(--seal);color:#fff}
+.tips-body li:hover{background:transparent}
+
+.utility-panel{grid-column:1 / -1;margin-top:0}
+.utility-panel .utility-list{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+}
+.utility-action{
+  display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center;gap:12px;
+  width:100%;padding:14px;border:1px solid var(--border);
+  border-radius:12px;background:#fffefc;color:var(--text);
+  text-align:left;cursor:pointer;transition:background .12s,border-color .12s;
+}
+.utility-action:hover{background:#faf9f5;border-color:#d5cebb}
+.utility-icon{
+  width:34px;height:34px;display:grid;place-items:center;border-radius:9px;
+  background:var(--bg);color:var(--muted);
+}
+.utility-icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.utility-title,.utility-desc{display:block}
+.utility-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px}
+.utility-desc{font-size:11.5px;line-height:1.45;color:var(--sub)}
+.tip-corner{position:relative;flex-shrink:0}
+.tip-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px 6px 11px;border-radius:999px;
+  border:1px solid #d5cebb;background:#fffefc;
+  color:var(--muted);font-size:12.5px;line-height:1;
+  cursor:pointer;white-space:nowrap;transition:all .12s;
+}
+.tip-btn:hover{border-color:var(--seal);background:var(--seal-tint);color:var(--seal-ink)}
+.tip-btn svg{width:14px;height:14px;stroke:var(--seal-ink);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.tip-pop{
+  display:none;position:absolute;top:34px;right:0;z-index:10;
+  width:220px;padding:16px;text-align:center;
+  background:#fffefc;border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 6px 24px rgba(28,27,24,.08);
+}
+.tip-pop.open{display:block}
+.tip-pop p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 12px}
+.tip-plate{background:transparent;border:none;border-radius:0;padding:0;text-align:center}
+.tip-qr{display:block;width:140px;height:auto;margin:0 auto 8px;border-radius:8px;border:1px solid var(--border);box-shadow:none}
+.tip-note{font-size:11px;color:var(--sub)}
+
+@media(max-width:900px){
+  #v-home{padding:22px 14px 36px}
+  .home-meta{margin-bottom:18px}
+  .home-title-line{align-items:flex-start;flex-direction:column}
+  .home-title{font-size:34px}
+  .home-grid{grid-template-columns:1fr}
+  .tool-board{padding:8px}
+  .home-action{grid-template-columns:42px minmax(0,1fr);gap:12px;padding:14px}
+  .action-enter{grid-column:2;justify-self:start;margin-top:4px}
+  .tips-card{height:auto}
+  .utility-panel .utility-list{grid-template-columns:1fr}
+  .tip-corner{width:auto}
+  .tip-pop{left:0;right:auto;width:min(260px,100%)}
 }
 </style>
 </head>
@@ -492,115 +803,110 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
   <div class="home-shell">
     <header class="home-top">
       <div>
-        <div class="home-kicker">Local reimbursement workspace</div>
-        <h1 class="home-title">报销工具箱</h1>
-        <p class="home-sub">整理发票、付款截图、人民币大写和日常查询。材料只在本机处理，不上传。</p>
-      </div>
-      <div class="home-status" aria-label="工具概览">
-        <div class="home-stat">
-          <div class="home-stat-num">3</div>
-          <div class="home-stat-label">报销工具</div>
+        <div class="home-meta">
+          <div class="home-kicker">本地处理 · 不上传材料</div>
         </div>
-        <div class="home-stat">
-          <div class="home-stat-num">2</div>
-          <div class="home-stat-label">实用工具</div>
-        </div>
-      </div>
-    </header>
-
-    <main class="home-grid">
-      <aside class="tips-card">
-        <div class="tips-head">报销材料粘贴顺序</div>
-        <div class="tips-body">
-          <ol>
-            <li>费用报销单</li>
-            <li>发票</li>
-            <li>付款记录（付款截图）</li>
-            <li>打车行程单</li>
-            <li>钉钉差旅报销单</li>
-            <li>钉钉出差申请单</li>
-            <li>需加印一份的发票（酒店专票、火车/高铁票）</li>
-          </ol>
-        </div>
-      </aside>
-
-      <div class="tool-board">
-        <section class="tool-section">
-          <div class="tool-section-head">
-            <div>
-              <div class="tool-section-title">报销相关工具</div>
-              <div class="tool-section-sub">从材料整理到纸质单据填写，覆盖常用报销动作。</div>
-            </div>
+        <div class="home-title-line">
+          <div class="home-title-row">
+            <span class="seal-mark" aria-hidden="true"></span>
+            <h1 class="home-title">报销工具箱</h1>
           </div>
-          <div class="tool-cards">
-            <div class="tc" onclick="showView('inv')">
-              <div class="tc-icon">🧾</div>
-              <div class="tc-name">发票排版工具</div>
-              <div class="tc-desc">上传发票图片，每页上下两张，便于从中间撕开；需要加印的发票可自动排到末尾。</div>
-              <div class="tc-enter">进入工具 →</div>
-            </div>
-            <div class="tc" onclick="showView('ss')">
-              <div class="tc-icon">📱</div>
-              <div class="tc-name">报销截图排版工具</div>
-              <div class="tc-desc">上传支付宝/微信付款截图，A4 每页 2 行 × 3 列，中间留有对折撕开线。</div>
-              <div class="tc-enter">进入工具 →</div>
-            </div>
-            <div class="tc" onclick="showView('money')">
-              <div class="tc-icon">💴</div>
-              <div class="tc-name">人民币大写转换</div>
-              <div class="tc-desc">输入阿拉伯数字金额，立即转换为费用报销单可填写的人民币大写格式。</div>
-              <div class="tc-enter">进入工具 →</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="tool-section">
-          <div class="tool-section-head">
-            <div>
-              <div class="tool-section-title">其他实用工具</div>
-              <div class="tool-section-sub">放不进报销流程，但打开频率很高的查询工具。</div>
-            </div>
-          </div>
-          <div class="utility-list">
-            <div class="tc" onclick="showView('holiday')">
-              <div class="tc-icon">📅</div>
-              <div>
-                <div class="tc-name">2026 放假安排</div>
-                <div class="tc-desc">查看全年节假日、调休上班日和放假天数，提示距离下一个节日还有多少天。</div>
-              </div>
-              <div class="tc-enter">进入工具 →</div>
-            </div>
-            <div class="tc" onclick="showView('ip')">
-              <div class="tc-icon">🌐</div>
-              <div>
-                <div class="tc-name">IP 地址查询</div>
-                <div class="tc-desc">查询本机公网 IP，展示省市、国家、运营商等归属地信息，并支持一键复制。</div>
-              </div>
-              <div class="tc-enter">进入工具 →</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 赞赏区 -->
-        <div class="tip-wrap">
-          <div class="tip-card">
-            <div class="tip-toggle" onclick="this.parentElement.classList.toggle('open')" title="点击展开/收起">
-              ☕ 如果这个工具帮到了你，可以请开发者喝杯咖啡～
-              <span class="tip-arrow">▾</span>
-            </div>
-            <div class="tip-body">
-              <div class="tip-copy">
-                <div class="tip-title">支持这个小工具继续维护</div>
-                <div class="tip-desc">工具完全本地运行，不上传报销材料。若它节省了你的整理时间，可以用微信扫码随心赞赏。</div>
-              </div>
+          <div class="tip-corner">
+            <button class="tip-btn" type="button" onclick="document.getElementById('tip-pop').classList.toggle('open')" title="请开发者喝杯咖啡">
+              <svg viewBox="0 0 24 24"><path d="M6 9h11a2 2 0 0 1 0 4h-.5"/><path d="M6 9v7a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-3"/><path d="M9 4c0 1.5 1 2 1 3.5M13 4c0 1.5 1 2 1 3.5"/></svg>
+              请喝咖啡
+            </button>
+            <div class="tip-pop" id="tip-pop">
               <div class="tip-plate">
                 <img class="tip-qr" src="assets/wechat-reward.png" alt="微信赞赏收款码">
                 <p class="tip-note">微信扫码 · 随心赞赏</p>
               </div>
+              <p>如果这个工具帮到了你<br>可以请开发者喝杯咖啡</p>
             </div>
           </div>
         </div>
+        <p class="home-sub">把报销材料整理成能直接打印、粘贴、填写的格式。</p>
       </div>
+    </header>
+
+    <main class="home-grid">
+      <section class="tool-board" aria-label="主要工具">
+        <div class="home-section-label">你现在要处理什么？</div>
+        <div class="primary-actions">
+          <button class="home-action" type="button" onclick="showView('inv')">
+            <span class="action-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+            </span>
+            <span class="action-copy">
+              <span class="action-title">发票排版</span>
+              <span class="action-desc">把发票排成 A4 上下两张；酒店专票、火车票可勾选加印一份，自动排到最后。</span>
+            </span>
+            <span class="action-enter">打开 →</span>
+          </button>
+          <button class="home-action" type="button" onclick="showView('ss')">
+            <span class="action-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+            </span>
+            <span class="action-copy">
+              <span class="action-title">付款截图排版</span>
+              <span class="action-desc">把支付宝、微信付款截图按 2 行 × 3 列排版，中间保留对折线。</span>
+            </span>
+            <span class="action-enter">打开 →</span>
+          </button>
+          <button class="home-action" type="button" onclick="showView('money')">
+            <span class="action-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3v18M7 7c0-2 2-3 5-3s5 1 5 3-2 3-5 3-5 1-5 3 2 3 5 3 5-1 5-3"/></svg>
+            </span>
+            <span class="action-copy">
+              <span class="action-title">人民币大写</span>
+              <span class="action-desc">输入数字金额，一键复制可直接填在费用报销单上的大写格式。</span>
+            </span>
+            <span class="action-enter">打开 →</span>
+          </button>
+        </div>
+      </section>
+
+      <aside class="tips-card" aria-label="报销材料顺序">
+        <div class="tips-head">粘贴顺序</div>
+        <div class="tips-sub">打印后按这个顺序整理。</div>
+        <div class="tips-body">
+          <ol>
+            <li>费用报销单</li>
+            <li>发票</li>
+            <li>付款截图</li>
+            <li>打车行程单</li>
+            <li>钉钉差旅报销单</li>
+            <li>钉钉出差申请单</li>
+            <li>加印发票（酒店专票、火车/高铁票）</li>
+          </ol>
+        </div>
+      </aside>
+
+      <section class="utility-panel" aria-label="辅助工具">
+        <div>
+          <div class="home-section-label">顺手查一下</div>
+          <div class="utility-list">
+            <button class="utility-action" type="button" onclick="showView('holiday')">
+              <span class="utility-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></svg>
+              </span>
+              <span>
+                <span class="utility-title">2026 放假安排</span>
+                <span class="utility-desc">节假日、调休、倒计时</span>
+              </span>
+            </button>
+            <button class="utility-action" type="button" onclick="showView('ip')">
+              <span class="utility-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.3 3.7 5.4 3.7 8.5s-1.3 6.2-3.7 8.5c-2.4-2.3-3.7-5.4-3.7-8.5S9.6 5.8 12 3.5z"/></svg>
+              </span>
+              <span>
+                <span class="utility-title">IP 地址查询</span>
+                <span class="utility-desc">公网 IP、归属地、一键复制</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
@@ -610,45 +916,45 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 ══════════════════════════════════════ -->
 <div id="v-inv" class="tool-view">
   <div class="topbar">
-    <button class="btn-back" onclick="showView('home')">← 首页</button>
-    <span class="topbar-title">发票排版工具</span>
+    <button class="btn-back" onclick="showView('home')">返回首页</button>
+    <span class="topbar-title">发票排版</span>
     <span class="topbar-badge">A4 · 每页 2 张</span>
-    <button class="btn-switch" onclick="showView('ss')">切换到截图工具 →</button>
+    <button class="btn-switch" onclick="showView('ss')">打开付款截图排版 →</button>
   </div>
-  <div class="inv-hint">💡 勾选「加印一份」的发票副本将统一排在所有发票的末尾，对应粘贴顺序第 7 项</div>
+  <div class="inv-hint">勾选「加印一份」后，副本会排在所有发票后面，对应粘贴顺序第 7 项</div>
   <div class="tool-body">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sec">
         <label class="zone" id="inv-zone" for="inv-filein">
           <div class="zone-icon">🧾</div>
-          <p><strong>点击选择</strong>或拖入发票图片</p>
-          <small>支持 PDF、JPG、PNG、WEBP，可多选</small>
+          <p><strong>选择</strong>或拖入发票文件</p>
+          <small>支持 PDF、JPG、PNG、WEBP，可一次添加多个文件</small>
         </label>
       </div>
       <div class="sec">
         <div class="srow">
-          <div><div class="slabel">页面边距</div><div class="ssub">四周留白（mm）</div></div>
+          <div><div class="slabel">页边距</div><div class="ssub">单位：mm</div></div>
           <input type="number" id="inv-margin" value="8" min="0" max="20" step="1" oninput="renderInvPreview()">
         </div>
         <div class="srow">
-          <div><div class="slabel">预览撕开线</div><div class="ssub">预览中显示虚线</div></div>
+          <div><div class="slabel">显示撕开线</div><div class="ssub">仅影响预览</div></div>
           <input type="checkbox" id="inv-guides" checked onchange="renderInvPreview()">
         </div>
         <div class="srow">
-          <div><div class="slabel">导出撕开线</div><div class="ssub">PDF 中包含虚线</div></div>
+          <div><div class="slabel">导出撕开线</div><div class="ssub">PDF 中保留虚线</div></div>
           <input type="checkbox" id="inv-export-line">
         </div>
       </div>
       <div class="sec" style="flex:1;display:flex;flex-direction:column;overflow:hidden;border-bottom:none">
         <div class="sec-head">
           <span class="sec-title">发票列表 <span id="inv-cnt" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--sub)"></span></span>
-          <button class="btn-clear" id="inv-clear-btn" onclick="clearArr(invFiles,'inv')" style="display:none">清空</button>
+          <button class="btn-clear" id="inv-clear-btn" onclick="clearArr(invFiles,'inv')" style="display:none">清空列表</button>
         </div>
-        <div class="file-list" id="inv-list"><div class="empty-msg">暂无发票，请上传</div></div>
+        <div class="file-list" id="inv-list"><div class="empty-msg">从上方添加发票文件</div></div>
       </div>
       <div class="sec-bottom">
-        <button class="btn-export" id="inv-export" onclick="exportInvPDF()" disabled>导出 PDF</button>
+        <button class="btn-export" id="inv-export" onclick="exportInvPDF()" disabled>导出为 PDF</button>
       </div>
     </aside>
     <!-- Preview -->
@@ -664,7 +970,7 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
         </div>
       </div>
       <div class="preview-scroll" id="inv-preview">
-        <div class="no-content">上传发票后在这里预览排版效果</div>
+        <div class="no-content">添加发票后在这里预览排版效果</div>
       </div>
     </main>
   </div>
@@ -675,16 +981,16 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 ══════════════════════════════════════ -->
 <div id="v-money" class="tool-view">
   <div class="topbar">
-    <button class="btn-back" onclick="showView('home')">← 首页</button>
-    <span class="topbar-title">人民币大写转换</span>
+    <button class="btn-back" onclick="showView('home')">返回首页</button>
+    <span class="topbar-title">人民币大写</span>
     <span class="topbar-badge">金额 · 大写</span>
-    <button class="btn-switch" onclick="showView('inv')">切换到发票工具 →</button>
+    <button class="btn-switch" onclick="showView('inv')">打开发票排版 →</button>
   </div>
   <main class="money-wrap">
     <section class="money-panel">
       <div class="money-shell">
         <div class="money-editor">
-          <label class="money-label" for="money-input">阿拉伯数字金额</label>
+          <label class="money-label" for="money-input">数字金额</label>
           <input class="money-input" id="money-input" type="text" inputmode="decimal" autocomplete="off" placeholder="1234.56" oninput="renderMoneyUpper()" onkeydown="handleMoneyKey(event)">
           <div class="money-error" id="money-error"></div>
           <div class="money-examples">
@@ -697,19 +1003,19 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
             </div>
           </div>
           <div class="money-side-actions">
-            <button class="money-btn" onclick="clearMoneyUpper()">清空</button>
+            <button class="money-btn" onclick="clearMoneyUpper()">清空金额</button>
           </div>
         </div>
         <div class="money-output-panel">
           <div class="money-result-head">
             <div>
               <div class="money-result-title">人民币大写</div>
-              <div class="money-result-meta">费用报销单填写格式</div>
+              <div class="money-result-meta">可填在费用报销单上</div>
             </div>
-            <button class="money-btn primary" onclick="copyMoneyUpper()">复制</button>
+            <button class="money-btn primary" onclick="copyMoneyUpper()">复制大写金额</button>
           </div>
           <div class="money-result">
-            <div class="money-placeholder" id="money-placeholder">待输入金额</div>
+            <div class="money-placeholder" id="money-placeholder">输入金额后显示大写</div>
             <div class="money-output" id="money-output"></div>
           </div>
         </div>
@@ -723,10 +1029,10 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 ══════════════════════════════════════ -->
 <div id="v-ss" class="tool-view">
   <div class="topbar">
-    <button class="btn-back" onclick="showView('home')">← 首页</button>
-    <span class="topbar-title">报销截图排版工具</span>
+    <button class="btn-back" onclick="showView('home')">返回首页</button>
+    <span class="topbar-title">付款截图排版</span>
     <span class="topbar-badge">A4 · 2 行 × 3 列</span>
-    <button class="btn-switch" onclick="showView('inv')">切换到发票工具 →</button>
+    <button class="btn-switch" onclick="showView('inv')">打开发票排版 →</button>
   </div>
   <div class="tool-body">
     <!-- Sidebar -->
@@ -734,33 +1040,33 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
       <div class="sec">
         <label class="zone" id="ss-zone" for="ss-filein">
           <div class="zone-icon">📱</div>
-          <p><strong>点击选择</strong>或拖入截图</p>
-          <small>支持 JPG、PNG、WEBP，可多选</small>
+          <p><strong>选择</strong>或拖入付款截图</p>
+          <small>支持 JPG、PNG、WEBP，可一次添加多张</small>
         </label>
       </div>
       <div class="sec">
         <div class="srow">
-          <div><div class="slabel">单元格间距</div><div class="ssub">图片间空白（mm）</div></div>
+          <div><div class="slabel">图片间距</div><div class="ssub">单位：mm</div></div>
           <input type="number" id="ss-gap" value="2" min="0" max="10" step="0.5" oninput="renderSSPreview()">
         </div>
         <div class="srow">
-          <div><div class="slabel">页面边距</div><div class="ssub">四周留白（mm）</div></div>
+          <div><div class="slabel">页边距</div><div class="ssub">单位：mm</div></div>
           <input type="number" id="ss-margin" value="8" min="0" max="20" step="1" oninput="renderSSPreview()">
         </div>
         <div class="srow">
-          <div><div class="slabel">显示辅助线</div><div class="ssub">折叠线（不导出）</div></div>
+          <div><div class="slabel">显示折叠线</div><div class="ssub">仅影响预览</div></div>
           <input type="checkbox" id="ss-guides" checked onchange="renderSSPreview()">
         </div>
       </div>
       <div class="sec" style="flex:1;display:flex;flex-direction:column;overflow:hidden;border-bottom:none">
         <div class="sec-head">
-          <span class="sec-title">截图列表 <span id="ss-cnt" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--sub)"></span></span>
-          <button class="btn-clear" id="ss-clear-btn" onclick="clearArr(ssFiles,'ss')" style="display:none">清空</button>
+          <span class="sec-title">付款截图列表 <span id="ss-cnt" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--sub)"></span></span>
+          <button class="btn-clear" id="ss-clear-btn" onclick="clearArr(ssFiles,'ss')" style="display:none">清空列表</button>
         </div>
-        <div class="file-list" id="ss-list"><div class="empty-msg">暂无截图，请上传</div></div>
+        <div class="file-list" id="ss-list"><div class="empty-msg">从上方添加付款截图</div></div>
       </div>
       <div class="sec-bottom">
-        <button class="btn-export" id="ss-export" onclick="exportSSPDF()" disabled>导出 PDF</button>
+        <button class="btn-export" id="ss-export" onclick="exportSSPDF()" disabled>导出为 PDF</button>
       </div>
     </aside>
     <!-- Preview -->
@@ -776,7 +1082,7 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
         </div>
       </div>
       <div class="preview-scroll" id="ss-preview">
-        <div class="no-content">上传截图后在这里预览排版效果</div>
+        <div class="no-content">添加付款截图后在这里预览排版效果</div>
       </div>
     </main>
   </div>
@@ -787,17 +1093,17 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 ══════════════════════════════════════ -->
 <div id="v-holiday" class="tool-view">
   <div class="topbar">
-    <button class="btn-back" onclick="showView('home')">← 首页</button>
+    <button class="btn-back" onclick="showView('home')">返回首页</button>
     <span class="topbar-title">2026 放假安排</span>
     <span class="topbar-badge">节假日 · 调休</span>
-    <button class="btn-switch" onclick="showView('ip')">切换到 IP 查询 →</button>
+    <button class="btn-switch" onclick="showView('ip')">打开 IP 查询 →</button>
   </div>
   <main class="simple-wrap">
     <section class="simple-panel">
       <div class="tool-headline">
         <div>
           <h2>2026 年放假安排</h2>
-          <p>查看全年法定节假日放假时间、调休上班日期和放假天数。</p>
+          <p>查看全年法定节假日、调休上班日和放假天数。</p>
         </div>
         <a class="source-link" href="https://www.gov.cn/zhengce/zhengceku/202511/content_7047091.htm" target="_blank" rel="noopener">数据来源：国务院办公厅</a>
       </div>
@@ -817,7 +1123,7 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
         <tbody id="holiday-body"></tbody>
       </table>
       <div class="holiday-note">
-        已过去的节假日会显示为灰色，当前假期显示为橙色，尚未到来的假期显示为绿色。倒计时按本机日期计算。
+        灰色表示已过去，橙色表示当前假期，绿色表示尚未到来。倒计时按本机日期计算。
       </div>
     </section>
   </main>
@@ -828,32 +1134,32 @@ input[type=checkbox]{accent-color:var(--blue);cursor:pointer}
 ══════════════════════════════════════ -->
 <div id="v-ip" class="tool-view">
   <div class="topbar">
-    <button class="btn-back" onclick="showView('home')">← 首页</button>
+    <button class="btn-back" onclick="showView('home')">返回首页</button>
     <span class="topbar-title">IP 地址查询</span>
     <span class="topbar-badge">公网 IP · 归属地</span>
-    <button class="btn-switch" onclick="showView('holiday')">切换到放假安排 →</button>
+    <button class="btn-switch" onclick="showView('holiday')">打开放假安排 →</button>
   </div>
   <main class="simple-wrap">
     <section class="simple-panel">
       <div class="tool-headline">
         <div>
-          <h2>本机 IP 地址查询</h2>
+          <h2>本机 IP 查询</h2>
           <p>查询当前网络出口的公网 IP，并展示国家、省市、运营商和时区信息。</p>
         </div>
       </div>
       <div class="ip-shell">
         <div class="ip-card">
           <div class="ip-card-title">当前网络</div>
-          <div class="ip-card-desc">点击查询会依次尝试多个公共 IP 归属地接口。若归属地接口都不可用，才退回为只显示 IP 地址。</div>
+          <div class="ip-card-desc">查询公网 IP、归属地和运营商信息。</div>
           <div class="ip-actions">
             <button class="money-btn primary" onclick="queryMyIP()">查询本机 IP</button>
-            <button class="money-btn" id="ip-copy-btn" onclick="copyIPInfo()">复制信息</button>
+            <button class="money-btn" id="ip-copy-btn" onclick="copyIPInfo()">复制 IP 信息</button>
           </div>
         </div>
         <div class="ip-result">
-          <div class="ip-status" id="ip-status">尚未查询</div>
+          <div class="ip-status" id="ip-status">等待查询</div>
           <div class="ip-main" id="ip-main">
-            <div class="ip-empty">进入工具后会自动查询，也可以点击左侧按钮手动刷新。</div>
+            <div class="ip-empty">点击“查询本机 IP”查看当前网络信息</div>
           </div>
         </div>
       </div>
@@ -1110,7 +1416,7 @@ function chgZoom(t, dir) {
    CLEAR
 ══════════════════════════════════════ */
 function clearArr(arr, t) {
-  if (!confirm(`确认清空全部 ${arr.length} 个文件？`)) return;
+  if (!confirm(`清空 ${arr.length} 个文件？此操作不会删除本机原文件。`)) return;
   arr.length = 0;
   if (t==='inv') { renderInvList(); renderInvPreview(); }
   else           { renderSSList();  renderSSPreview();  }
@@ -1132,7 +1438,7 @@ function makeItem(arr, i, extraHtml, onRerender) {
       <div class="imeta">${f.w}×${f.h} · ${(f.size/1024).toFixed(0)}KB</div>
     </div>
     ${extraHtml}
-    <button class="idel" title="移除">✕</button>
+    <button class="idel" title="移除文件">✕</button>
   `;
   // delete
   d.querySelector('.idel').addEventListener('click', () => { arr.splice(i,1); onRerender(); });
@@ -1185,7 +1491,7 @@ function renderInvList() {
   const clearBtn= document.getElementById('inv-clear-btn');
   const expBtn  = document.getElementById('inv-export');
   if (!invFiles.length) {
-    listEl.innerHTML = '<div class="empty-msg">暂无发票，请上传</div>';
+    listEl.innerHTML = '<div class="empty-msg">从上方添加发票文件</div>';
     cntEl.textContent=''; clearBtn.style.display='none'; expBtn.disabled=true; return;
   }
   const seq = invSeq();
@@ -1193,7 +1499,7 @@ function renderInvList() {
   clearBtn.style.display=''; expBtn.disabled=false;
   listEl.innerHTML='';
   invFiles.forEach((f,i) => {
-    const btn = `<button class="double-btn${f.double?' on':''}" onclick="toggleDouble(${i})" title="加印一份（酒店专票、火车票等需两份时勾选）">${f.double?'✓ 已加印':'＋ 加印一份'}</button>`;
+    const btn = `<button class="double-btn${f.double?' on':''}" onclick="toggleDouble(${i})" title="酒店专票、火车票等需要两份时勾选">${f.double?'已加印一份':'加印一份'}</button>`;
     const el = makeItem(invFiles, i, btn, ()=>{ renderInvList(); renderInvPreview(); });
     listEl.appendChild(el);
   });
@@ -1216,7 +1522,7 @@ function renderInvPreview() {
   siEl.textContent = invFiles.length
     ? `${invFiles.length} 张发票，打印 ${seq.length} 份`
     : '— 张发票';
-  if (!invFiles.length) { preEl.innerHTML='<div class="no-content">上传发票后在这里预览排版效果</div>'; return; }
+  if (!invFiles.length) { preEl.innerHTML='<div class="no-content">添加发票后在这里预览排版效果</div>'; return; }
 
   const MM = 3.7795275591;
   const a4w = 210*MM*zoom, a4h = 297*MM*zoom;
@@ -1250,7 +1556,7 @@ function renderInvPreview() {
       page.appendChild(wrap);
     });
 
-    // Fold/tear line（受"预览撕开线"开关控制）
+    // Fold/tear line controlled by the preview toggle.
     const invGuides = document.getElementById('inv-guides');
     if (!invGuides || invGuides.checked) {
       const fl = document.createElement('div');
@@ -1273,7 +1579,7 @@ function renderInvPreview() {
 
 async function exportInvPDF() {
   if (!invFiles.length) return;
-  showProg(true); setProg(5,'正在加载发票图片…'); await tick();
+  showProg(true); setProg(5,'正在加载发票…'); await tick();
   try {
     const showExportLine = !!document.getElementById('inv-export-line')?.checked;
     const margin = parseFloat(document.getElementById('inv-margin').value)||8;
@@ -1323,8 +1629,10 @@ async function exportInvPDF() {
     }
     setProg(92,'正在生成 PDF…'); await tick();
     dlPDF(buildPDF(jpegs,A4W,A4H), `发票_${invFiles.length}张_${today()}.pdf`);
-    setProg(100,'完成！'); await new Promise(r=>setTimeout(r,700));
-  } catch(e){ alert('导出失败：'+e.message); }
+    setProg(100,'导出完成'); await new Promise(r=>setTimeout(r,700));
+  } catch(e){
+    alert('导出发票 PDF 失败，请刷新页面后重试。如果仍然失败，请减少一次导出的文件数量。');
+  }
   finally{ showProg(false); }
 }
 
@@ -1343,7 +1651,7 @@ function renderSSList() {
   const clearBtn= document.getElementById('ss-clear-btn');
   const expBtn  = document.getElementById('ss-export');
   if (!ssFiles.length) {
-    listEl.innerHTML='<div class="empty-msg">暂无截图，请上传</div>';
+    listEl.innerHTML='<div class="empty-msg">从上方添加付款截图</div>';
     cntEl.textContent=''; clearBtn.style.display='none'; expBtn.disabled=true; return;
   }
   cntEl.textContent=`共 ${ssFiles.length} 张`;
@@ -1367,7 +1675,7 @@ function renderSSPreview() {
 
   piEl.textContent = ssFiles.length ? `共 ${pages.length} 页` : '— 页';
   iiEl.textContent = ssFiles.length ? `${ssFiles.length} 张截图` : '— 张截图';
-  if (!ssFiles.length) { preEl.innerHTML='<div class="no-content">上传截图后在这里预览排版效果</div>'; return; }
+  if (!ssFiles.length) { preEl.innerHTML='<div class="no-content">添加付款截图后在这里预览排版效果</div>'; return; }
 
   const MM=3.7795275591;
   const a4w=210*MM*zoom, a4h=297*MM*zoom;
@@ -1421,7 +1729,7 @@ function renderSSPreview() {
 
 async function exportSSPDF() {
   if (!ssFiles.length) return;
-  showProg(true); setProg(5,'正在加载截图…'); await tick();
+  showProg(true); setProg(5,'正在加载付款截图…'); await tick();
   try {
     const gap   = parseFloat(document.getElementById('ss-gap').value)||0;
     const margin= parseFloat(document.getElementById('ss-margin').value)||8;
@@ -1456,8 +1764,10 @@ async function exportSSPDF() {
     }
     setProg(92,'正在生成 PDF…'); await tick();
     dlPDF(buildPDF(jpegs,A4W,A4H), `报销截图_${ssFiles.length}张_${today()}.pdf`);
-    setProg(100,'完成！'); await new Promise(r=>setTimeout(r,700));
-  } catch(e){ alert('导出失败：'+e.message); }
+    setProg(100,'导出完成'); await new Promise(r=>setTimeout(r,700));
+  } catch(e){
+    alert('导出付款截图 PDF 失败，请刷新页面后重试。如果仍然失败，请减少一次导出的图片数量。');
+  }
   finally{ showProg(false); }
 }
 
@@ -1512,17 +1822,17 @@ function renderHolidayTool() {
     const start = parseLocalDate(next.start);
     const end = parseLocalDate(next.end);
     if (today >= start && today <= end) {
-      nextEl.innerHTML = `今天在 <strong>${next.name}</strong> 假期中`;
+      nextEl.innerHTML = `今天是 <strong>${next.name}</strong> 假期`;
     } else {
       const left = daysBetween(today, start);
-      nextEl.innerHTML = `距离下一个节日【${next.name}】还有 <strong>${left}</strong> 天`;
+      nextEl.innerHTML = `距离 ${next.name} 还有 <strong>${left}</strong> 天`;
     }
   }
 
   const body = document.getElementById('holiday-body');
   body.innerHTML = HOLIDAYS_2026.map(h => {
     const status = holidayStatus(h, today);
-    const work = h.workdays.length ? h.workdays.join('、') : '<span class="empty-workday">无调休上班</span>';
+    const work = h.workdays.length ? h.workdays.join('、') : '<span class="empty-workday">无调休</span>';
     return `<tr class="${status}">
       <td><span class="holiday-name">${h.name}</span></td>
       <td>${h.range}</td>
@@ -1538,16 +1848,16 @@ function renderHolidayTool() {
 async function queryMyIP() {
   const status = document.getElementById('ip-status');
   const main = document.getElementById('ip-main');
-  status.textContent = '正在分别查询 IPv4 和 IPv6…';
-  main.innerHTML = '<div class="ip-empty">查询中，请稍候…</div>';
+  status.textContent = '正在查询 IPv4 和 IPv6…';
+  main.innerHTML = '<div class="ip-empty">正在查询网络信息…</div>';
   const targets = [
     { type:'IPv4', url:'https://api.ipify.org?format=json' },
     { type:'IPv6', url:'https://api6.ipify.org?format=json' },
   ];
   const results = (await Promise.all(targets.map(queryIPTarget))).filter(Boolean);
   if (!results.length) {
-    status.textContent = '查询失败';
-    main.innerHTML = '<div class="ip-empty">无法访问 IP 查询接口，请检查网络后重试。</div>';
+    status.textContent = '查询未完成';
+    main.innerHTML = '<div class="ip-empty">无法获取 IP 信息，请检查网络后重试。</div>';
     return;
   }
   renderIPInfo(results);
@@ -1678,14 +1988,14 @@ function getIPType(ip) {
 async function copyIPInfo() {
   const btn = document.getElementById('ip-copy-btn');
   if (!ipInfoText) {
-    showCopyState(btn, '暂无信息');
+    showCopyState(btn, '先查询 IP');
     return;
   }
   try {
     await copyText(ipInfoText);
     showCopyState(btn, '已复制');
   } catch (e) {
-    showCopyState(btn, '复制失败');
+    showCopyState(btn, '复制失败，请手动选择信息');
   }
 }
 
@@ -1715,7 +2025,7 @@ function parseMoneyCents(raw) {
   const s = String(raw).trim().replace(/[￥¥,\s]/g, '');
   if (!s) return null;
   if (!/^(0|[1-9]\d*)(\.\d{0,2})?$/.test(s)) {
-    throw new Error('请输入非负金额，最多保留两位小数');
+    throw new Error('请输入大于或等于 0 的金额，最多保留两位小数');
   }
   const [yuan, frac=''] = s.split('.');
   const cents = BigInt(yuan) * 100n + BigInt((frac + '00').slice(0, 2));
@@ -1793,7 +2103,8 @@ function renderMoneyUpper() {
   } catch (e) {
     output.textContent = '';
     placeholder.style.display = '';
-    error.textContent = e.message;
+    const message = e instanceof Error ? e.message : '';
+    error.textContent = /^请输入|^金额不能/.test(message) ? message : '金额格式不正确，请检查后重试';
     error.style.visibility = 'visible';
   }
 }
@@ -1871,6 +2182,12 @@ function setProg(pct,txt){
   document.getElementById('pbar').style.width=pct+'%';
   document.getElementById('prog-txt').textContent=txt;
 }
+
+document.addEventListener('click', e => {
+  const corner = document.querySelector('.tip-corner');
+  const pop = document.getElementById('tip-pop');
+  if (corner && pop && !corner.contains(e.target)) pop.classList.remove('open');
+});
 
 /* Init */
 showView('home');
