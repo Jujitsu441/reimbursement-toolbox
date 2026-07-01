@@ -10,6 +10,7 @@ import {
   CalendarDays,
   Coffee,
   Copy,
+  Eye,
   FileText,
   Globe2,
   Grid2X2,
@@ -403,6 +404,34 @@ function App() {
 }
 
 function HomeView({ setView }: { setView: (view: View) => void }) {
+  const [visitCount, setVisitCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!shouldTrackVisit()) return
+
+    const cachedCount = readVisitCountCache()
+    if (cachedCount !== null) {
+      setVisitCount(cachedCount)
+      return
+    }
+
+    let cancelled = false
+    fetch("/api/visits", { method: "POST" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: unknown) => {
+        if (cancelled || !isVisitResponse(data)) return
+        writeVisitCountCache(data.total)
+        setVisitCount(data.total)
+      })
+      .catch(() => {
+        // 访问量是附加信息，统计失败时不打断工具使用。
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 px-5 py-10">
       <header className="flex flex-col gap-5">
@@ -418,24 +447,27 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
               把报销材料整理成能直接打印、粘贴、填写的格式。
             </p>
           </div>
-          <Popover>
-            <PopoverTrigger render={<Button variant="outline" size="sm" />}>
-              <Coffee data-icon="inline-start" />
-              请喝咖啡
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-64 p-4 text-center">
-              <img
-                src={rewardQr}
-                alt="微信赞赏收款码"
-                className="mx-auto mb-3 h-auto w-40 rounded-lg border border-border"
-              />
-              <p className="text-xs leading-5 text-muted-foreground">
-                如果这个工具帮到了你
-                <br />
-                可以请开发者喝杯咖啡
-              </p>
-            </PopoverContent>
-          </Popover>
+          <div className="flex shrink-0 items-center gap-2">
+            {visitCount === null ? null : <VisitCounter total={visitCount} />}
+            <Popover>
+              <PopoverTrigger render={<Button variant="outline" size="sm" />}>
+                <Coffee data-icon="inline-start" />
+                请喝咖啡
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-64 p-4 text-center">
+                <img
+                  src={rewardQr}
+                  alt="微信赞赏收款码"
+                  className="mx-auto mb-3 h-auto w-40 rounded-lg border border-border"
+                />
+                <p className="text-xs leading-5 text-muted-foreground">
+                  如果这个工具帮到了你
+                  <br />
+                  可以请开发者喝杯咖啡
+                </p>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
       </header>
 
@@ -516,6 +548,15 @@ function HomeView({ setView }: { setView: (view: View) => void }) {
         />
       </section>
     </main>
+  )
+}
+
+function VisitCounter({ total }: { total: number }) {
+  return (
+    <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs text-muted-foreground">
+      <Eye className="size-3.5" />
+      累计 {formatVisitCount(total)} 次访问
+    </span>
   )
 }
 
@@ -1723,6 +1764,45 @@ function chunk<T>(items: T[], size: number) {
 function today() {
   const date = new Date()
   return `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`
+}
+
+function shouldTrackVisit() {
+  if (typeof window === "undefined") return false
+  const { hostname, protocol } = window.location
+  return protocol === "https:" && hostname !== "localhost" && hostname !== "127.0.0.1"
+}
+
+function isVisitResponse(value: unknown): value is { total: number } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "total" in value &&
+    typeof value.total === "number" &&
+    Number.isFinite(value.total)
+  )
+}
+
+function formatVisitCount(total: number) {
+  return new Intl.NumberFormat("zh-CN").format(total)
+}
+
+function readVisitCountCache() {
+  try {
+    const raw = window.sessionStorage.getItem("reimbursement.visitCount")
+    if (!raw) return null
+    const total = Number.parseInt(raw, 10)
+    return Number.isFinite(total) ? total : null
+  } catch {
+    return null
+  }
+}
+
+function writeVisitCountCache(total: number) {
+  try {
+    window.sessionStorage.setItem("reimbursement.visitCount", String(total))
+  } catch {
+    // sessionStorage 不可用时只影响重复计数保护，不影响主要功能。
+  }
 }
 
 const HOLIDAYS_2026 = [

@@ -55,4 +55,19 @@ node scripts/verify-workflow.mjs
 
 ## 可选部署
 
-如果仍需要部署 Cloudflare Pages，可以把 `dist/index.html` 作为静态产物上传；当前项目的主要交付形态仍是离线单文件。
+如果仍需要部署 Cloudflare Pages，建议连接 GitHub 仓库并使用下面的构建配置：
+
+```text
+Build command: pnpm build:single
+Build output directory: dist
+Root directory: /
+Production branch: main
+```
+
+线上访问量依赖 Cloudflare Pages Functions 和 KV。后台需要创建一个 KV 命名空间，并在 Pages 项目里绑定变量名：
+
+```text
+VISIT_COUNTER
+```
+
+绑定后，线上首页会显示累计访问次数；离线打开 `dist/index.html` 时不会请求接口，也不会显示访问量。
