@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type { ReactNode } from "react"
+import { flushSync } from "react-dom"
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs"
 import { WorkerMessageHandler } from "pdfjs-dist/legacy/build/pdf.worker.mjs"
 import { PDFDocument } from "pdf-lib"
@@ -81,6 +82,12 @@ type IpInfo = {
 
 type IpStatus = "idle" | "loading" | "done" | "error"
 type ThemeMode = "light" | "dark"
+type ThemeToggleOrigin = HTMLElement | null
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (callback: () => void) => {
+    ready: Promise<void>
+  }
+}
 
 const MM_TO_PX = 3.7795275591
 const A4_MM = { width: 210, height: 297 }
@@ -132,7 +139,7 @@ function App() {
     text: "",
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", themeMode === "dark")
     writeThemeMode(themeMode)
   }, [themeMode])
@@ -314,8 +321,47 @@ function App() {
     }
   }
 
-  const toggleThemeMode = () => {
-    setThemeMode((mode) => (mode === "dark" ? "light" : "dark"))
+  const toggleThemeMode = (origin: ThemeToggleOrigin) => {
+    const nextMode = themeMode === "dark" ? "light" : "dark"
+    const viewTransitionDocument = document as ViewTransitionDocument
+
+    if (
+      !viewTransitionDocument.startViewTransition ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setThemeMode(nextMode)
+      return
+    }
+
+    const rect = origin?.getBoundingClientRect()
+    const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2
+    const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    )
+
+    const transition = viewTransitionDocument.startViewTransition(() => {
+      flushSync(() => {
+        setThemeMode(nextMode)
+      })
+    })
+
+    void transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 500,
+          easing: "ease-in-out",
+          pseudoElement: "::view-transition-new(root)",
+        }
+      )
+    })
   }
 
   return (
@@ -437,7 +483,7 @@ function HomeView({
 }: {
   setView: (view: View) => void
   themeMode: ThemeMode
-  onToggleTheme: () => void
+  onToggleTheme: (origin: ThemeToggleOrigin) => void
 }) {
   const [visitCount, setVisitCount] = useState<number | null>(null)
 
@@ -602,18 +648,20 @@ function ThemeToggle({
   compact = false,
 }: {
   mode: ThemeMode
-  onToggle: () => void
+  onToggle: (origin: ThemeToggleOrigin) => void
   compact?: boolean
 }) {
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const isDark = mode === "dark"
   const label = isDark ? "浅色模式" : "深色模式"
   const Icon = isDark ? Sun : Moon
 
   return (
     <Button
+      ref={buttonRef}
       variant="outline"
       size={compact ? "icon-sm" : "sm"}
-      onClick={onToggle}
+      onClick={() => onToggle(buttonRef.current)}
       title={label}
       aria-label={label}
     >
@@ -698,7 +746,7 @@ function ToolShell({
   badge: string
   onHome: () => void
   themeMode: ThemeMode
-  onToggleTheme: () => void
+  onToggleTheme: (origin: ThemeToggleOrigin) => void
   children: ReactNode
 }) {
   return (
