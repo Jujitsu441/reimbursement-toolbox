@@ -18,7 +18,7 @@ export function ThemeToggle({
     <Button
       variant="outline"
       size={compact ? "icon-sm" : "sm"}
-      onClick={(event) => onToggle({ x: event.clientX, y: event.clientY })}
+      onClick={(event) => onToggle(event.currentTarget)}
       title={label}
       aria-label={label}
     >

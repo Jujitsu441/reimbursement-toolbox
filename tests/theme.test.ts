@@ -59,17 +59,29 @@ describe("toggleThemeModeWithTransition", () => {
     expect(document.documentElement.animate).toHaveBeenCalled()
   })
 
-  it("starts animation from the click point", async () => {
+  it("starts animation from the trigger center", async () => {
     const setThemeMode = vi.fn()
     const startViewTransition = vi.fn((callback: () => void) => {
       callback()
       return { ready: Promise.resolve() }
     })
     const documentRef = Object.assign(document, { startViewTransition })
+    const origin = document.createElement("button")
+    origin.getBoundingClientRect = vi.fn(() => ({
+      left: 150,
+      top: 40,
+      width: 120,
+      height: 32,
+      right: 270,
+      bottom: 72,
+      x: 150,
+      y: 40,
+      toJSON: () => ({}),
+    }))
 
     toggleThemeModeWithTransition({
       currentMode: "light",
-      origin: { x: 320, y: 48 },
+      origin,
       setThemeMode,
       documentRef,
     })
@@ -78,7 +90,7 @@ describe("toggleThemeModeWithTransition", () => {
 
     expect(document.documentElement.animate).toHaveBeenCalledWith(
       expect.objectContaining({
-        clipPath: expect.arrayContaining(["circle(0px at 320px 48px)"]),
+        clipPath: expect.arrayContaining(["circle(0px at 210px 56px)"]),
       }),
       expect.any(Object)
     )
