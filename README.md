@@ -117,7 +117,9 @@ VISIT_COUNTER
 
 绑定后，线上首页会显示累计访问次数；离线打开 `dist/index.html` 时不会请求接口，也不会显示访问量。
 
-仓库里的 `wrangler.toml` 只固化 Pages 项目名、产物目录和兼容日期，不包含任何密钥。手动部署时可以运行：
+本项目不使用 `wrangler.toml` 管理 Pages 绑定。访问量 KV 请在 Cloudflare 后台的 Pages 项目设置里添加，否则后台会提示绑定由配置文件管理，无法点击添加。
+
+手动部署时可以运行：
 
 ```sh
 pnpm deploy
