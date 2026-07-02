@@ -135,7 +135,9 @@ await clickText("导出为 PDF");
 await waitFor("document.body?.innerText.includes('导出完成') || !document.body?.innerText.includes('正在生成 PDF')", "发票导出", 12000);
 await waitFor("!document.body?.innerText.includes('导出完成') && !document.body?.innerText.includes('正在')", "发票导出遮罩关闭", 5000);
 
-await clickText("打开付款截图排版");
+await clickText("首页");
+await waitFor("document.body?.innerText.includes('报销工具箱') && document.body?.innerText.includes('你现在要处理什么？')", "返回首页");
+await clickText("付款截图排版");
 await waitFor("document.body?.innerText.includes('选择或拖入付款截图')", "进入截图工具");
 await new Promise((resolve) => setTimeout(resolve, 500));
 await evaluate(`
@@ -170,7 +172,9 @@ await clickText("导出为 PDF");
 await waitFor("document.body?.innerText.includes('导出完成') || !document.body?.innerText.includes('正在生成 PDF')", "截图导出", 12000);
 await waitFor("!document.body?.innerText.includes('导出完成') && !document.body?.innerText.includes('正在')", "截图导出遮罩关闭", 5000);
 
-await clickText("打开发票排版");
+await clickText("首页");
+await waitFor("document.body?.innerText.includes('报销工具箱') && document.body?.innerText.includes('你现在要处理什么？')", "返回首页");
+await clickText("发票排版");
 await waitFor("document.body?.innerText.includes('中文发票测试.pdf') && document.body?.innerText.includes('已加印一份')", "切回发票后状态保留");
 
 await new Promise((resolve) => setTimeout(resolve, 1200));
