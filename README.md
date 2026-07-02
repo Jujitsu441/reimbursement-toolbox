@@ -119,7 +119,7 @@ VISIT_COUNTER
 
 本项目不使用 `wrangler.toml` 管理 Pages 绑定。访问量 KV 请在 Cloudflare 后台的 Pages 项目设置里添加，否则后台会提示绑定由配置文件管理，无法点击添加。
 
-手动部署时可以运行：
+需要手动触发线上刷新时，可以推送一次 README 说明类的小改动，或运行：
 
 ```sh
 pnpm deploy
