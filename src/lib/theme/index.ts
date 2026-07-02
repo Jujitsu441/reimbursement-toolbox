@@ -23,9 +23,9 @@ export function toggleThemeModeWithTransition({ currentMode, origin, setThemeMod
   const nextMode = currentMode === "dark" ? "light" : "dark"
   const viewTransitionDocument = documentRef as ViewTransitionDocument
   if (!viewTransitionDocument.startViewTransition || windowRef.matchMedia("(prefers-reduced-motion: reduce)").matches) { setThemeMode(nextMode); return }
-  const rect = origin?.getBoundingClientRect()
-  const x = rect ? rect.left + rect.width / 2 : windowRef.innerWidth / 2
-  const y = rect ? rect.top + rect.height / 2 : windowRef.innerHeight / 2
+  const rect = origin && "getBoundingClientRect" in origin ? origin.getBoundingClientRect() : null
+  const x = origin && "x" in origin ? origin.x : rect ? rect.left + rect.width / 2 : windowRef.innerWidth / 2
+  const y = origin && "y" in origin ? origin.y : rect ? rect.top + rect.height / 2 : windowRef.innerHeight / 2
   const endRadius = Math.hypot(Math.max(x, windowRef.innerWidth - x), Math.max(y, windowRef.innerHeight - y))
   const transition = viewTransitionDocument.startViewTransition(() => { flushSync(() => { setThemeMode(nextMode) }) })
   void transition.ready.then(() => { documentRef.documentElement.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] }, { duration: 500, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" }) })
