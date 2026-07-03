@@ -95,4 +95,48 @@ describe("toggleThemeModeWithTransition", () => {
       expect.any(Object)
     )
   })
+
+  it("scales animation coordinates on high-DPR displays", async () => {
+    const setThemeMode = vi.fn()
+    const startViewTransition = vi.fn((callback: () => void) => {
+      callback()
+      return { ready: Promise.resolve() }
+    })
+    const documentRef = Object.assign(document, { startViewTransition })
+    const windowRef = {
+      devicePixelRatio: 2,
+      innerWidth: 800,
+      innerHeight: 600,
+      matchMedia: window.matchMedia,
+    } as Window
+    const origin = document.createElement("button")
+    origin.getBoundingClientRect = vi.fn(() => ({
+      left: 150,
+      top: 40,
+      width: 120,
+      height: 32,
+      right: 270,
+      bottom: 72,
+      x: 150,
+      y: 40,
+      toJSON: () => ({}),
+    }))
+
+    toggleThemeModeWithTransition({
+      currentMode: "light",
+      origin,
+      setThemeMode,
+      documentRef,
+      windowRef,
+    })
+
+    await Promise.resolve()
+
+    expect(document.documentElement.animate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        clipPath: expect.arrayContaining(["circle(0px at 420px 112px)"]),
+      }),
+      expect.any(Object)
+    )
+  })
 })
